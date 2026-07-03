@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NHK Easy News Thumbnail Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="app app--light app--theme-green">
+  <div class="app__overlay" id="loadingOverlay" hidden aria-hidden="true">
+    <div class="app__spinner" role="status" aria-label="이미지 생성 중"></div>
+    <p class="app__loading-text">썸네일 생성 중…</p>
+  </div>
+
+  <header class="app__header">
+    <div class="app__header-inner">
+      <h1 class="app__title">NHK Easy News Thumbnail Generator</h1>
+      <div class="app__header-actions">
+        <button type="button" class="btn btn--icon" id="themeModeBtn" aria-label="다크모드 전환">
+          <span class="btn__icon" id="themeModeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app__main">
+    <section class="panel panel--form" aria-labelledby="formTitle">
+      <div class="card">
+        <h2 class="card__title" id="formTitle">썸네일 정보 입력</h2>
+
+        <form class="form" id="thumbnailForm" novalidate>
+          <div class="form__group">
+            <label class="form__label" for="koreanTitle">한국어 제목</label>
+            <textarea class="form__input form__textarea" id="koreanTitle" rows="3" placeholder="예: 정시에 출발하다"></textarea>
+          </div>
+
+          <div class="form__group">
+            <label class="form__label" for="japaneseTitle">일본어 제목</label>
+            <textarea class="form__input form__textarea form__textarea--jp" id="japaneseTitle" rows="3" placeholder="例: 定時に出発する"></textarea>
+          </div>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">카테고리</legend>
+            <div class="category-picker" id="categoryPicker" role="radiogroup" aria-label="카테고리 선택">
+              <button type="button" class="category-picker__btn" data-category="JLPT N5" aria-pressed="false">JLPT N5</button>
+              <button type="button" class="category-picker__btn" data-category="JLPT N4" aria-pressed="false">JLPT N4</button>
+              <button type="button" class="category-picker__btn is-active" data-category="JLPT N3" aria-pressed="true">JLPT N3</button>
+              <button type="button" class="category-picker__btn" data-category="JLPT N2" aria-pressed="false">JLPT N2</button>
+              <button type="button" class="category-picker__btn" data-category="JLPT N1" aria-pressed="false">JLPT N1</button>
+              <button type="button" class="category-picker__btn" data-category="여행 일본어" aria-pressed="false">여행 일본어</button>
+              <button type="button" class="category-picker__btn" data-category="정치" aria-pressed="false">정치</button>
+              <button type="button" class="category-picker__btn" data-category="경제" aria-pressed="false">경제</button>
+              <button type="button" class="category-picker__btn" data-category="사회" aria-pressed="false">사회</button>
+              <button type="button" class="category-picker__btn" data-category="문화" aria-pressed="false">문화</button>
+            </div>
+          </fieldset>
+
+          <div class="form__group">
+            <label class="form__label" for="episode">회차번호</label>
+            <input class="form__input" type="number" id="episode" min="0" max="999" placeholder="예: 23">
+          </div>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">컬러 테마</legend>
+            <div class="theme-picker" id="colorThemePicker" role="radiogroup" aria-label="컬러 테마 선택">
+              <button type="button" class="theme-picker__btn theme-picker__btn--green is-active" data-theme="green" aria-pressed="true">Green</button>
+              <button type="button" class="theme-picker__btn theme-picker__btn--blue" data-theme="blue" aria-pressed="false">Blue</button>
+              <button type="button" class="theme-picker__btn theme-picker__btn--orange" data-theme="orange" aria-pressed="false">Orange</button>
+              <button type="button" class="theme-picker__btn theme-picker__btn--red" data-theme="red" aria-pressed="false">Red</button>
+              <button type="button" class="theme-picker__btn theme-picker__btn--purple" data-theme="purple" aria-pressed="false">Purple</button>
+              <button type="button" class="theme-picker__btn theme-picker__btn--gray" data-theme="gray" aria-pressed="false">Gray</button>
+            </div>
+          </fieldset>
+
+          <div class="form__actions">
+            <button type="button" class="btn btn--primary" id="savePngBtn">
+              <span class="btn__label">PNG 저장</span>
+            </button>
+            <button type="button" class="btn btn--secondary" id="saveJpgBtn">
+              <span class="btn__label">JPG 저장</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="panel panel--preview" aria-labelledby="previewTitle">
+      <h2 class="panel__title" id="previewTitle">미리보기</h2>
+      <div class="preview">
+        <div class="preview__scale">
+          <article class="thumbnail" id="thumbnail" aria-label="썸네일 미리보기">
+            <div class="thumbnail__inner">
+              <header class="thumbnail__header">
+                <div class="thumbnail__brand">
+                  <span class="thumbnail__logo" aria-hidden="true"></span>
+                  <span class="thumbnail__series">NHK Easy News</span>
+                </div>
+              </header>
+
+              <hr class="thumbnail__rule" aria-hidden="true">
+
+              <div class="thumbnail__body">
+                <h3 class="thumbnail__title-ko" id="previewKoreanTitle">한국어 제목을 입력하세요</h3>
+                <p class="thumbnail__title-jp" id="previewJapaneseTitle">日本語タイトルを入力してください</p>
+              </div>
+
+              <hr class="thumbnail__rule" aria-hidden="true">
+
+              <footer class="thumbnail__footer">
+                <p class="thumbnail__tags" id="previewTags">
+                  <span class="thumbnail__tags-label" id="previewCategory">JLPT N3</span>
+                  <span class="thumbnail__tags-episode" id="previewEpisode">#023</span>
+                </p>
+              </footer>
+
+
+              <p class="thumbnail__copyright">© alas0213</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="js/app.js" type="module"></script>
+</body>
+</html>
