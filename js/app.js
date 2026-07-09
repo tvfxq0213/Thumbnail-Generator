@@ -295,6 +295,76 @@ function showLoading(show) {
 }
 
 /**
+ * 미리보기 요소의 계산된 스타일을 캡처용 복제 노드에 인라인으로 복사한다
+ * (html2canvas가 외부 폰트·동적 스타일을 누락하는 문제 방지)
+ */
+function syncCaptureStyles(source, target) {
+  const pairs = [
+    [".thumbnail__title-ko", ["fontFamily", "fontSize", "fontWeight", "color", "whiteSpace", "lineHeight", "letterSpacing"]],
+    [".thumbnail__title-jp", ["fontFamily", "fontSize", "fontWeight", "color", "whiteSpace", "lineHeight", "letterSpacing"]],
+    [".thumbnail__series", ["fontFamily", "fontSize", "fontWeight", "color", "letterSpacing"]],
+    [".thumbnail__tags-label", ["fontFamily", "fontSize", "fontWeight", "color", "letterSpacing"]],
+    [".thumbnail__tags-episode", ["fontFamily", "fontSize", "fontWeight", "color", "letterSpacing"]],
+    [".thumbnail__copyright", ["fontFamily", "fontSize", "color", "letterSpacing"]],
+    [".thumbnail__logo", ["backgroundColor", "width", "height", "borderRadius"]],
+  ];
+
+  pairs.forEach(([selector, props]) => {
+    const src = source.querySelector(selector);
+    const dst = target.querySelector(selector);
+    if (!src || !dst) return;
+
+    const computed = getComputedStyle(src);
+    props.forEach((prop) => {
+      dst.style[prop] = computed[prop];
+    });
+  });
+
+  const srcAccent = getComputedStyle(source).getPropertyValue("--thumb-accent").trim();
+  if (srcAccent) {
+    target.style.setProperty("--thumb-accent", srcAccent);
+  }
+}
+
+/**
+ * 캡처용 오프스크린 노드를 만든다 (transform·클리핑 없이 1200×1200 그대로 렌더)
+ * @returns {{ wrapper: HTMLElement, node: HTMLElement }}
+ */
+function createCaptureNode() {
+  const source = dom.thumbnail;
+  const wrapper = document.createElement("div");
+  wrapper.setAttribute("aria-hidden", "true");
+  wrapper.style.cssText =
+    "position:fixed;left:-10000px;top:0;width:1200px;height:1200px;overflow:visible;pointer-events:none;z-index:-1;";
+
+  const node = source.cloneNode(true);
+  node.removeAttribute("id");
+  node.style.cssText =
+    "position:static;transform:none;left:auto;top:auto;width:1200px;height:1200px;margin:0;overflow:hidden;";
+
+  syncCaptureStyles(source, node);
+
+  wrapper.appendChild(node);
+  document.body.appendChild(wrapper);
+  return { wrapper, node };
+}
+
+/** 캡처 전 웹폰트가 로드될 때까지 대기한다 */
+async function ensureFontsReady() {
+  const samples = [
+    `700 ${getKoreanFontSize(dom.koreanTitle.value)}px Pretendard`,
+    `500 ${getJapaneseFontSize(dom.japaneseTitle.value)}px "Noto Sans JP"`,
+    '500 32px "Noto Sans JP"',
+    "500 30px Pretendard",
+  ];
+
+  await Promise.all([
+    document.fonts.ready,
+    ...samples.map((spec) => document.fonts.load(spec).catch(() => undefined)),
+  ]);
+}
+
+/**
  * html2canvas로 썸네일을 이미지로 저장한다
  * @param {"png"|"jpeg"} format
  * @param {boolean} showLoader - PNG 저장 시 1초 로딩 표시
@@ -310,21 +380,38 @@ async function exportThumbnail(format, showLoader = false) {
     await delay(1000);
   }
 
-  const thumb = dom.thumbnail;
-  const prevTransform = thumb.style.transform;
+  let captureRoot = null;
 
   try {
-    /* 캡처 시 scale 변환을 제거해 1200×1200 원본 크기로 렌더링 */
-    thumb.style.transform = "translateX(-50%) scale(1)";
+    await ensureFontsReady();
 
-    const canvas = await html2canvas(thumb, {
-      scale: 2,
+    const { wrapper, node } = createCaptureNode();
+    captureRoot = wrapper;
+
+    /* 레이아웃 반영 후 캡처 */
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    const canvas = await html2canvas(node, {
+      scale: 1,
       useCORS: true,
       allowTaint: true,
       backgroundColor: "#f7f6f3",
       logging: false,
-      width: 1200,
-      height: 1200,
+      scrollX: 0,
+      scrollY: 0,
+      onclone: (clonedDoc, clonedNode) => {
+        clonedNode.style.transform = "none";
+        clonedNode.style.position = "static";
+        clonedNode.style.width = "1200px";
+        clonedNode.style.height = "1200px";
+
+        let parent = clonedNode.parentElement;
+        while (parent && parent !== clonedDoc.body) {
+          parent.style.overflow = "visible";
+          parent.style.transform = "none";
+          parent = parent.parentElement;
+        }
+      },
     });
 
     const mimeType = format === "png" ? "image/png" : "image/jpeg";
@@ -343,7 +430,7 @@ async function exportThumbnail(format, showLoader = false) {
     console.error("Export failed:", err);
     alert("이미지 저장에 실패했습니다. 다시 시도해 주세요.");
   } finally {
-    thumb.style.transform = prevTransform;
+    captureRoot?.remove();
     if (showLoader) showLoading(false);
   }
 }
