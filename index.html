@@ -27,41 +27,118 @@
     </div>
   </header>
 
+  <div class="mode-tabs" id="modeTabs" role="tablist" aria-label="썸네일 유형 선택">
+    <button type="button" class="mode-tabs__btn is-active" data-mode="jp" role="tab" aria-selected="true">일본어 학습</button>
+    <button type="button" class="mode-tabs__btn" data-mode="travel" role="tab" aria-selected="false">여행 콘텐츠</button>
+  </div>
+
   <main class="app__main">
     <section class="panel panel--form" aria-labelledby="formTitle">
       <div class="card">
         <h2 class="card__title" id="formTitle">썸네일 정보 입력</h2>
 
         <form class="form" id="thumbnailForm" novalidate>
-          <div class="form__group">
-            <label class="form__label" for="koreanTitle">한국어 제목</label>
-            <textarea class="form__input form__textarea" id="koreanTitle" rows="3" placeholder="예: 정시에 출발하다"></textarea>
-          </div>
-
-          <div class="form__group">
-            <label class="form__label" for="japaneseTitle">일본어 제목</label>
-            <textarea class="form__input form__textarea form__textarea--jp" id="japaneseTitle" rows="3" placeholder="例: 定時に出発する"></textarea>
-          </div>
-
-          <fieldset class="form__fieldset">
-            <legend class="form__legend">카테고리</legend>
-            <div class="category-picker" id="categoryPicker" role="radiogroup" aria-label="카테고리 선택">
-              <button type="button" class="category-picker__btn" data-category="JLPT N5" aria-pressed="false">JLPT N5</button>
-              <button type="button" class="category-picker__btn" data-category="JLPT N4" aria-pressed="false">JLPT N4</button>
-              <button type="button" class="category-picker__btn is-active" data-category="JLPT N3" aria-pressed="true">JLPT N3</button>
-              <button type="button" class="category-picker__btn" data-category="JLPT N2" aria-pressed="false">JLPT N2</button>
-              <button type="button" class="category-picker__btn" data-category="JLPT N1" aria-pressed="false">JLPT N1</button>
-              <button type="button" class="category-picker__btn" data-category="여행 일본어" aria-pressed="false">여행 일본어</button>
-              <button type="button" class="category-picker__btn" data-category="정치" aria-pressed="false">정치</button>
-              <button type="button" class="category-picker__btn" data-category="경제" aria-pressed="false">경제</button>
-              <button type="button" class="category-picker__btn" data-category="사회" aria-pressed="false">사회</button>
-              <button type="button" class="category-picker__btn" data-category="문화" aria-pressed="false">문화</button>
+          <div class="mode-panel" id="jpFields" data-mode-panel="jp">
+            <div class="form__group">
+              <label class="form__label" for="koreanTitle">한국어 제목</label>
+              <textarea class="form__input form__textarea" id="koreanTitle" rows="3" placeholder="예: 정시에 출발하다"></textarea>
             </div>
-          </fieldset>
 
-          <div class="form__group">
-            <label class="form__label" for="episode">회차번호</label>
-            <input class="form__input" type="number" id="episode" min="0" max="999" placeholder="예: 23">
+            <div class="form__group">
+              <label class="form__label" for="japaneseTitle">일본어 제목</label>
+              <textarea class="form__input form__textarea form__textarea--jp" id="japaneseTitle" rows="3" placeholder="例: 定時に出発する"></textarea>
+            </div>
+
+            <fieldset class="form__fieldset">
+              <legend class="form__legend">카테고리</legend>
+              <div class="category-picker" id="categoryPicker" role="radiogroup" aria-label="카테고리 선택">
+                <button type="button" class="category-picker__btn" data-category="JLPT N5" aria-pressed="false">JLPT N5</button>
+                <button type="button" class="category-picker__btn" data-category="JLPT N4" aria-pressed="false">JLPT N4</button>
+                <button type="button" class="category-picker__btn is-active" data-category="JLPT N3" aria-pressed="true">JLPT N3</button>
+                <button type="button" class="category-picker__btn" data-category="JLPT N2" aria-pressed="false">JLPT N2</button>
+                <button type="button" class="category-picker__btn" data-category="JLPT N1" aria-pressed="false">JLPT N1</button>
+                <button type="button" class="category-picker__btn" data-category="여행 일본어" aria-pressed="false">여행 일본어</button>
+                <button type="button" class="category-picker__btn" data-category="정치" aria-pressed="false">정치</button>
+                <button type="button" class="category-picker__btn" data-category="경제" aria-pressed="false">경제</button>
+                <button type="button" class="category-picker__btn" data-category="사회" aria-pressed="false">사회</button>
+                <button type="button" class="category-picker__btn" data-category="문화" aria-pressed="false">문화</button>
+              </div>
+            </fieldset>
+
+            <div class="form__group">
+              <label class="form__label" for="episode">회차번호</label>
+              <input class="form__input" type="number" id="episode" min="0" max="999" placeholder="예: 23">
+            </div>
+          </div>
+
+          <div class="mode-panel" id="travelFields" data-mode-panel="travel" hidden>
+            <div class="form__group">
+              <label class="form__label" for="travelImageInput">배경 이미지</label>
+              <div class="image-upload" id="imageUploadArea">
+                <input type="file" accept="image/*" id="travelImageInput" class="image-upload__input" hidden>
+                <label for="travelImageInput" class="image-upload__label" id="imageUploadLabel">
+                  <span class="image-upload__icon">🖼️</span>
+                  <span>클릭하여 이미지 선택</span>
+                </label>
+                <button type="button" class="image-upload__remove" id="imageRemoveBtn" hidden>이미지 제거</button>
+              </div>
+            </div>
+
+            <fieldset class="form__fieldset">
+              <legend class="form__legend">템플릿 스타일</legend>
+              <div class="category-picker" id="travelStylePicker" role="radiogroup" aria-label="템플릿 스타일 선택">
+                <button type="button" class="category-picker__btn is-active" data-style="brand" aria-pressed="true">여행기 (브랜드형)</button>
+                <button type="button" class="category-picker__btn" data-style="qa" aria-pressed="false">정보형 (Q&amp;A)</button>
+              </div>
+            </fieldset>
+
+            <fieldset class="form__fieldset">
+              <legend class="form__legend">딤(dim) 처리 색상</legend>
+              <div class="category-picker" id="dimColorPicker" role="radiogroup" aria-label="딤 색상 선택">
+                <button type="button" class="category-picker__btn is-active" data-dim="black" aria-pressed="true">검정</button>
+                <button type="button" class="category-picker__btn" data-dim="white" aria-pressed="false">흰색</button>
+              </div>
+            </fieldset>
+
+            <div class="form__group">
+              <label class="form__label" for="dimOpacity">딤 농도 <span id="dimOpacityValue">40%</span></label>
+              <input type="range" id="dimOpacity" class="form__range" min="0" max="90" value="40">
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="travelBrand">국가/브랜드 라벨</label>
+              <input class="form__input" type="text" id="travelBrand" placeholder="예: 🇹🇼 TAIWAN 또는 🇯🇵 오키나와" maxlength="40">
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="travelTitle">제목</label>
+              <textarea class="form__input form__textarea" id="travelTitle" rows="2" placeholder="예: 용호탑 또는 렌터카 없이&#10;가능할까?"></textarea>
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="travelSubtitle">부제</label>
+              <input class="form__input" type="text" id="travelSubtitle" placeholder="예: 체감 38도 폭염 / 실제 다녀온 후기" maxlength="60">
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="travelSeries">시리즈 번호 (선택)</label>
+              <input class="form__input" type="text" id="travelSeries" placeholder="예: Day 04" maxlength="20">
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="travelHandle">블로그 주소</label>
+              <input class="form__input" type="text" id="travelHandle" placeholder="예: blog.naver.com/example" maxlength="60">
+            </div>
+
+            <fieldset class="form__fieldset">
+              <legend class="form__legend">블로그 주소 위치</legend>
+              <div class="corner-picker" id="handlePositionPicker" role="radiogroup" aria-label="블로그 주소 위치 선택">
+                <button type="button" class="corner-picker__btn" data-position="top-left" aria-pressed="false">좌상단</button>
+                <button type="button" class="corner-picker__btn" data-position="top-right" aria-pressed="false">우상단</button>
+                <button type="button" class="corner-picker__btn" data-position="bottom-left" aria-pressed="false">좌하단</button>
+                <button type="button" class="corner-picker__btn is-active" data-position="bottom-right" aria-pressed="true">우하단</button>
+              </div>
+            </fieldset>
           </div>
 
           <fieldset class="form__fieldset">
@@ -120,6 +197,18 @@
 
               <p class="thumbnail__copyright">© alas0213</p>
             </div>
+          </article>
+
+          <article class="thumbnail thumbnail--travel" id="thumbnailTravel" data-style="brand" data-dim="black" aria-label="여행 썸네일 미리보기" hidden>
+            <div class="thumbnail__travel-bg" id="travelBg"></div>
+            <div class="thumbnail__travel-dim" id="travelDim" style="--dim-opacity: 0.4"></div>
+            <p class="thumbnail__travel-brand" id="previewTravelBrand">🇹🇼 TAIWAN</p>
+            <div class="thumbnail__travel-content">
+              <h3 class="thumbnail__travel-title" id="previewTravelTitle">용호탑</h3>
+              <p class="thumbnail__travel-subtitle" id="previewTravelSubtitle">체감 38도 폭염</p>
+              <p class="thumbnail__travel-series" id="previewTravelSeries">Day 04</p>
+            </div>
+            <p class="thumbnail__travel-handle thumbnail__travel-handle--bottom-right" id="previewTravelHandle">blog.naver.com/example</p>
           </article>
         </div>
       </div>

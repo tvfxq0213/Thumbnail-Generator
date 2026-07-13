@@ -140,6 +140,45 @@ body {
   align-items: start;
 }
 
+/* --- Mode Tabs --- */
+.mode-tabs {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 0;
+}
+
+.mode-tabs__btn {
+  padding: 0.625rem 1.5rem;
+  font-family: var(--font-ko);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.mode-tabs__btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.mode-tabs__btn.is-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+  box-shadow: 0 2px 8px var(--color-accent-soft);
+}
+
+/* --- Mode Panel --- */
+.mode-panel[hidden] {
+  display: none;
+}
+
 /* --- Panel --- */
 .panel--preview {
   position: sticky;
@@ -304,6 +343,101 @@ body {
   border-color: var(--color-accent);
   color: #ffffff;
   box-shadow: 0 2px 8px var(--color-accent-soft);
+}
+
+/* --- Image Upload --- */
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.image-upload__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.image-upload__label:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.image-upload__icon {
+  font-size: 1.5rem;
+}
+
+.image-upload.has-image .image-upload__label {
+  border-style: solid;
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.image-upload__remove {
+  align-self: flex-start;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-family: var(--font-ko);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.image-upload__remove:hover {
+  border-color: #c62828;
+  color: #c62828;
+}
+
+/* --- Range Slider --- */
+.form__range {
+  width: 100%;
+  accent-color: var(--color-accent);
+}
+
+/* --- Corner Picker --- */
+.corner-picker {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  max-width: 260px;
+}
+
+.corner-picker__btn {
+  padding: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-family: var(--font-ko);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.corner-picker__btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.corner-picker__btn.is-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
 }
 
 /* --- Buttons (Material Design inspired) --- */
@@ -522,6 +656,134 @@ body {
   text-align: center;
   letter-spacing: 0.04em;
 }
+
+/* --- Travel Thumbnail --- */
+.thumbnail--travel {
+  background: #333333;
+}
+
+.thumbnail__travel-bg {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(135deg, #6b6b6b, #3a3a3a);
+  background-size: cover;
+  background-position: center;
+}
+
+.thumbnail__travel-dim {
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
+  opacity: var(--dim-opacity, 0.4);
+}
+
+.thumbnail--travel[data-dim="white"] .thumbnail__travel-dim {
+  background-color: #ffffff;
+}
+
+.thumbnail__travel-brand {
+  position: absolute;
+  top: 70px;
+  left: 90px;
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.thumbnail--travel[data-dim="white"] .thumbnail__travel-brand {
+  color: #222222;
+  text-shadow: none;
+}
+
+.thumbnail__travel-content {
+  position: absolute;
+  left: 90px;
+  right: 90px;
+  bottom: 110px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.thumbnail__travel-title {
+  font-family: var(--font-ko);
+  font-weight: 800;
+  font-size: 96px;
+  line-height: 1.25;
+  color: #ffffff;
+  white-space: pre-line;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.thumbnail--travel[data-dim="white"] .thumbnail__travel-title {
+  color: #1a1a1a;
+  text-shadow: none;
+}
+
+.thumbnail__travel-subtitle {
+  font-family: var(--font-ko);
+  font-weight: 700;
+  font-size: 44px;
+  color: var(--thumb-accent, #ffd54f);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.thumbnail--travel[data-style="qa"] .thumbnail__travel-subtitle {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.thumbnail--travel[data-dim="white"] .thumbnail__travel-subtitle {
+  text-shadow: none;
+}
+
+.thumbnail--travel[data-dim="white"][data-style="qa"] .thumbnail__travel-subtitle {
+  color: #333333;
+}
+
+.thumbnail__travel-series {
+  font-size: 34px;
+  font-weight: 600;
+  color: #ffffff;
+  opacity: 0.85;
+}
+
+.thumbnail__travel-series:empty {
+  display: none;
+}
+
+.thumbnail--travel[data-dim="white"] .thumbnail__travel-series {
+  color: #222222;
+}
+
+.thumbnail__travel-handle {
+  position: absolute;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 10px 20px;
+  border-radius: 999px;
+}
+
+.thumbnail__travel-handle:empty {
+  display: none;
+}
+
+.thumbnail--travel[data-dim="white"] .thumbnail__travel-handle {
+  color: #222222;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.thumbnail__travel-handle--top-left { top: 70px; left: 90px; }
+.thumbnail__travel-handle--top-right { top: 70px; right: 90px; }
+.thumbnail__travel-handle--bottom-left { bottom: 60px; left: 90px; }
+.thumbnail__travel-handle--bottom-right { bottom: 60px; right: 90px; }
 
 /* Thumbnail accent color sync */
 .thumbnail[data-theme="green"] { --thumb-accent: #2e7d32; }
