@@ -278,6 +278,19 @@
   flex: 1;
 }
 
+.copyright{
+  font-size:10px;
+  color:#ddd;
+  text-align: center;
+  margin-top:auto;
+  font-family: var(--font-ko);
+
+}
+.copyright a{
+  color:#ddd;
+  text-decoration: underline;
+}
+
 /* --- Responsive --- */
 @media (max-width: 900px) {
   .a4-scale {
