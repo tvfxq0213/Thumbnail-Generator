@@ -438,7 +438,7 @@ function createExportClone() {
 function generateFilename() {
   const raw = dom.dateText.value.trim() || words[0]?.kanji.trim() || "handout";
   const safe = raw.replace(/\s+/g, "_").replace(/[^\w가-힣ㄱ-ㆎ.-]/g, "");
-  return `NHK_핸드아웃_${safe || "handout"}.pdf`;
+  return `Study_Japanese_${safe || "handout"}.pdf`;
 }
 
 /** html2pdf.js로 핸드아웃을 A4 PDF로 저장한다 */
@@ -466,7 +466,14 @@ async function exportPdf() {
         margin: 0,
         filename: generateFilename(),
         image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", logging: false },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: "#ffffff",
+          logging: false,
+          scrollX: 0,
+          scrollY: 0,
+        },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       })
       .from(node)
