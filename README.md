@@ -5,6 +5,8 @@
 - **일본어 학습** — **NHK Easy News** 시리즈용 무인양품(MUJI) 교재 느낌의 심플한 텍스트 썸네일
 - **여행 콘텐츠** — 업로드한 사진 위에 딤(dim) 처리 후 텍스트를 올리는 여행기/정보형(Q&A) 썸네일
 
+같은 저장소에서 **NHK Easy News 학습용 A4 핸드아웃(PDF) 생성기**(`handout.html`)도 함께 제공합니다. 사용법은 [HANDOUT.md](HANDOUT.md) 참고.
+
 빌드 과정 없는 순수 HTML/CSS/JS라 로컬 실행은 물론 **GitHub Pages로도 바로 배포**할 수 있습니다.
 
 ## 설치 방법
@@ -96,13 +98,17 @@ https://tvfxq0213.github.io/Thumbnail-Generator/
 ```
 Thumbnail-Generator/
 ├── index.html          # 메인 HTML (일본어 학습 + 여행 콘텐츠 폼/미리보기)
+├── handout.html         # NHK Easy News A4 핸드아웃 생성기 (자세한 내용은 HANDOUT.md)
 ├── css/
-│   └── style.css       # BEM 방식 스타일
+│   ├── style.css       # BEM 방식 공통 스타일
+│   └── handout.css     # 핸드아웃 A4 미리보기 스타일
 ├── js/
-│   └── app.js          # Vanilla JS (모듈화)
+│   ├── app.js          # 썸네일 생성기 Vanilla JS (모듈화)
+│   └── handout.js      # 핸드아웃 생성기 Vanilla JS (모듈화)
 ├── assets/
 │   └── logo.svg        # 로고 에셋
-└── README.md
+├── README.md
+└── HANDOUT.md          # 핸드아웃 생성기 사용 가이드
 ```
 
 ## 사용 라이브러리
@@ -110,6 +116,7 @@ Thumbnail-Generator/
 | 라이브러리 | 용도 | 로드 방식 |
 |-----------|------|----------|
 | [html2canvas](https://html2canvas.hertzen.com/) v1.4.1 | 썸네일 이미지 변환 | jsDelivr CDN |
+| [html2pdf.js](https://github.com/eKoopmans/html2pdf.js) v0.10.1 | 핸드아웃 A4 PDF 변환 | jsDelivr CDN |
 | [Pretendard](https://github.com/orioncactus/pretendard) | 한국어 폰트 | jsDelivr CDN |
 | [Noto Sans JP](https://fonts.google.com/noto/specimen/Noto+Sans+JP) | 일본어 폰트 | Google Fonts |
 

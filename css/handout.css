@@ -1,0 +1,290 @@
+/* ==========================================================================
+   NHK Easy News Handout Generator — A4 Handout Styles
+   (style.css의 공통 변수·카드·폼·버튼 스타일 위에 얹어서 사용)
+   ========================================================================== */
+
+.form__input--jp {
+  font-family: var(--font-jp);
+}
+
+/* --- Repeatable entry list (words / grammar) --- */
+.repeat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.repeat-entry {
+  padding: 0.875rem 0.875rem 0.25rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.repeat-entry__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.625rem;
+}
+
+.repeat-entry__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+
+.repeat-entry__remove {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.repeat-entry__remove:hover {
+  color: #c62828;
+  border-color: #c62828;
+}
+
+.btn--add {
+  width: 100%;
+  background: transparent;
+  color: var(--color-accent);
+  border: 1px dashed var(--color-accent);
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 0.8125rem;
+  padding: 0.5rem 1rem;
+}
+
+/* --- Preview wrapper --- */
+.preview--a4 {
+  padding: 1.5rem;
+}
+
+.a4-scale {
+  width: 100%;
+  max-width: 477px;
+  aspect-ratio: 210 / 297;
+  position: relative;
+}
+
+/* --- A4 Page (794×1123px ≈ 210×297mm @ 96dpi) --- */
+.a4-page {
+  width: 794px;
+  height: 1123px;
+  background: #ffffff;
+  color: #222222;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) scale(0.6);
+  transform-origin: top center;
+  font-family: var(--font-ko);
+  padding: 64px 60px;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.a4-page__header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 3px solid var(--color-accent);
+  margin-bottom: 32px;
+}
+
+.a4-page__brand {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+}
+
+.a4-page__date {
+  font-size: 16px;
+  font-weight: 500;
+  color: #888888;
+}
+
+/* --- Section --- */
+.a4-section {
+  flex-shrink: 0;
+}
+
+.a4-section__title {
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--color-accent);
+  padding: 4px 14px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.a4-divider {
+  border: none;
+  border-top: 1px dashed #cccccc;
+  margin: 24px 0;
+  flex-shrink: 0;
+}
+
+/* --- Vocabulary word --- */
+.a4-word-block {
+  margin-bottom: 22px;
+}
+
+.a4-word-block:last-child {
+  margin-bottom: 0;
+}
+
+.a4-word {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.a4-word__num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.a4-word__kanji {
+  font-family: var(--font-jp);
+  font-size: 30px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+/* --- Grammar pattern --- */
+.a4-grammar-block {
+  margin-bottom: 22px;
+}
+
+.a4-grammar-block:last-child {
+  margin-bottom: 0;
+}
+
+.a4-grammar-pattern {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 14px;
+  min-height: 30px;
+}
+
+.a4-grammar-pattern--jp {
+  font-family: var(--font-jp);
+}
+
+/* --- Label / value field --- */
+.a4-field {
+  margin-bottom: 14px;
+}
+
+.a4-field__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #999999;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.a4-field__value {
+  display: block;
+  font-size: 19px;
+  color: #222222;
+  line-height: 1.5;
+  min-height: 26px;
+}
+
+.a4-field__value--jp {
+  font-family: var(--font-jp);
+}
+
+.a4-field__value--standalone {
+  margin-bottom: 14px;
+}
+
+/* --- Blank practice boxes (genkouyoushi style) --- */
+.a4-blank-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.a4-box {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid #cccccc;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* --- Review list --- */
+.a4-review {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.a4-review__item {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  counter-increment: review-count;
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 6px;
+}
+
+.a4-review__item::before {
+  content: counter(review-count) ".";
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.a4-review {
+  counter-reset: review-count;
+}
+
+.a4-review__text {
+  font-size: 17px;
+  color: #333333;
+  min-height: 24px;
+  flex: 1;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .a4-scale {
+    max-width: 100%;
+  }
+
+  .a4-page {
+    transform: translateX(-50%) scale(calc((100vw - 4rem) / 794));
+  }
+}
