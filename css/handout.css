@@ -350,8 +350,8 @@
   position: absolute;
   right: 0;
   bottom: 18px;
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
 }
 
@@ -359,7 +359,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 10px;
   font-size:10px;
   color:#ddd;
   text-align: center;
