@@ -150,12 +150,12 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 14px;
-  row-gap: 6px;
+  row-gap: 4px;
 }
 
 .a4-word-block {
   min-width: 0;
-  padding: 5px 7px;
+  padding: 3px 6px;
   border: 1px solid #e5e5e5;
   border-radius: 4px;
 }
@@ -174,10 +174,16 @@
   flex-shrink: 0;
 }
 
+.a4-word__text {
+  min-width: 0;
+}
+
 .a4-word__kanji {
+  display: block;
   font-family: var(--font-jp);
   font-size: 19px;
   font-weight: 700;
+  line-height: 1.15;
   color: #1a1a1a;
 }
 
@@ -198,7 +204,9 @@
 }
 
 .a4-word__meaning {
+  display: block;
   font-size: 12px;
+  line-height: 1.2;
   color: #666666;
 }
 
@@ -210,6 +218,7 @@
 
 .a4-word__example-jp {
   font-family: var(--font-jp);
+  display: block;
 }
 
 .a4-word__example-tr {

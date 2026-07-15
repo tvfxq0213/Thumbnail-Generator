@@ -313,15 +313,20 @@ function renderPreviewWords() {
     num.textContent = circledNumber(index + 1);
     wordRow.appendChild(num);
 
+    const text = document.createElement("div");
+    text.className = "a4-word__text";
+
     const kanji = document.createElement("span");
     kanji.className = "a4-word__kanji";
     kanji.textContent = word.kanji.trim() || (index === 0 ? "開花" : "");
-    wordRow.appendChild(kanji);
+    text.appendChild(kanji);
 
     const meaning = document.createElement("span");
     meaning.className = "a4-word__meaning";
     meaning.textContent = word.meaning.trim();
-    wordRow.appendChild(meaning);
+    text.appendChild(meaning);
+
+    wordRow.appendChild(text);
 
     wordRow.appendChild(createCheckRow());
 
