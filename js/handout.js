@@ -318,12 +318,37 @@ function renderPreviewWords() {
     kanji.textContent = word.kanji.trim() || (index === 0 ? "開花" : "");
     wordRow.appendChild(kanji);
 
+    const meaning = document.createElement("span");
+    meaning.className = "a4-word__meaning";
+    meaning.textContent = word.meaning.trim();
+    wordRow.appendChild(meaning);
+
     wordRow.appendChild(createCheckRow());
 
     block.appendChild(wordRow);
-    block.appendChild(createPreviewField("뜻", word.meaning.trim()));
-    block.appendChild(createPreviewField("예문", word.example.trim(), true));
-    block.appendChild(createPreviewField("해석", word.exampleTranslation.trim()));
+
+    const example = word.example.trim();
+    const translation = word.exampleTranslation.trim();
+    if (example || translation) {
+      const exampleLine = document.createElement("p");
+      exampleLine.className = "a4-word__example";
+
+      if (example) {
+        const jp = document.createElement("span");
+        jp.className = "a4-word__example-jp";
+        jp.textContent = example;
+        exampleLine.appendChild(jp);
+      }
+
+      if (translation) {
+        const tr = document.createElement("span");
+        tr.className = "a4-word__example-tr";
+        tr.textContent = ` — ${translation}`;
+        exampleLine.appendChild(tr);
+      }
+
+      block.appendChild(exampleLine);
+    }
 
     dom.previewWords.appendChild(block);
   });

@@ -92,7 +92,7 @@
   transform: translateX(-50%) scale(0.6);
   transform-origin: top center;
   font-family: var(--font-ko);
-  padding: 64px 60px;
+  padding: 64px 30px;
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
@@ -104,9 +104,9 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding-bottom: 20px;
+  padding-bottom: 12px;
   border-bottom: 3px solid var(--color-accent);
-  margin-bottom: 32px;
+  margin-bottom: 18px;
 }
 
 .a4-page__brand {
@@ -129,47 +129,51 @@
 
 .a4-section__title {
   display: inline-block;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #ffffff;
   background: var(--color-accent);
-  padding: 4px 14px;
+  padding: 3px 12px;
   border-radius: 4px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .a4-divider {
   border: none;
   border-top: 1px dashed #cccccc;
-  margin: 24px 0;
+  margin: 14px 0;
   flex-shrink: 0;
 }
 
 /* --- Vocabulary word --- */
 .a4-word-block {
-  margin-bottom: 22px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed #e0e0e0;
 }
 
 .a4-word-block:last-child {
   margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .a4-word {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
+  gap: 8px;
+  margin-bottom: 2px;
 }
 
 .a4-word__num {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--color-accent);
 }
 
 .a4-word__kanji {
   font-family: var(--font-jp);
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
 }
@@ -177,21 +181,40 @@
 /* --- Memorization check boxes --- */
 .a4-check-row {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   margin-left: auto;
 }
 
 .a4-check-box {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border: 1.5px solid #cccccc;
   border-radius: 3px;
   flex-shrink: 0;
 }
 
+.a4-word__meaning {
+  font-size: 14px;
+  color: #666666;
+}
+
+.a4-word__example {
+  font-size: 13px;
+  color: #444444;
+  line-height: 1.4;
+}
+
+.a4-word__example-jp {
+  font-family: var(--font-jp);
+}
+
+.a4-word__example-tr {
+  color: #999999;
+}
+
 /* --- Grammar pattern --- */
 .a4-grammar-block {
-  margin-bottom: 22px;
+  margin-bottom: 14px;
 }
 
 .a4-grammar-block:last-child {
@@ -202,8 +225,8 @@
   font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 14px;
-  min-height: 30px;
+  margin-bottom: 8px;
+  min-height: 26px;
 }
 
 .a4-grammar-pattern--jp {
@@ -212,7 +235,7 @@
 
 /* --- Label / value field --- */
 .a4-field {
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 
 .a4-field__label {
@@ -229,8 +252,8 @@
   display: block;
   font-size: 19px;
   color: #222222;
-  line-height: 1.5;
-  min-height: 26px;
+  line-height: 1.4;
+  min-height: 20px;
 }
 
 .a4-field__value--jp {
@@ -238,7 +261,8 @@
 }
 
 .a4-field__value--standalone {
-  margin-bottom: 14px;
+  margin-bottom: 8px;
+  font-size: 17px;
   white-space: pre-wrap;
 }
 
@@ -247,7 +271,7 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 12px;
 }
 
 .a4-review__item {
@@ -256,7 +280,7 @@
   gap: 10px;
   counter-increment: review-count;
   border-bottom: 1px solid #cccccc;
-  padding-bottom: 6px;
+  padding-bottom: 4px;
 }
 
 .a4-review__item::before {
@@ -279,12 +303,14 @@
 }
 
 .copyright{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   font-size:10px;
   color:#ddd;
   text-align: center;
-  margin-top:auto;
   font-family: var(--font-ko);
-
 }
 .copyright a{
   color:#ddd;
