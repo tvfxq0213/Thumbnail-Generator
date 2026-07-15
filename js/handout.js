@@ -223,7 +223,7 @@ function renderGrammarEntries() {
         labelText: "문법 패턴",
         value: grammar.pattern,
         placeholder: "例: ～ようになる",
-        maxlength: 30,
+        maxlength: 60,
         extraClass: "form__input--jp",
         onInput: (value) => {
           grammar.pattern = value;

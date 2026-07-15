@@ -110,14 +110,14 @@
 }
 
 .a4-page__brand {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: 0.04em;
   color: var(--color-accent);
 }
 
 .a4-page__date {
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 500;
   color: #888888;
 }
@@ -129,13 +129,13 @@
 
 .a4-section__title {
   display: inline-block;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 700;
   color: #ffffff;
   background: var(--color-accent);
   padding: 3px 12px;
   border-radius: 4px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .a4-divider {
@@ -146,34 +146,37 @@
 }
 
 /* --- Vocabulary word --- */
-.a4-word-block {
-  margin-bottom: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px dashed #e0e0e0;
+#previewWords {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 14px;
+  row-gap: 6px;
 }
 
-.a4-word-block:last-child {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
+.a4-word-block {
+  min-width: 0;
+  padding: 5px 7px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
 }
 
 .a4-word {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 2px;
+  gap: 6px;
+  margin-bottom: 1px;
 }
 
 .a4-word__num {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--color-accent);
+  flex-shrink: 0;
 }
 
 .a4-word__kanji {
   font-family: var(--font-jp);
-  font-size: 24px;
+  font-size: 19px;
   font-weight: 700;
   color: #1a1a1a;
 }
@@ -181,27 +184,28 @@
 /* --- Memorization check boxes --- */
 .a4-check-row {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
 .a4-check-box {
-  width: 16px;
-  height: 16px;
+  width: 13px;
+  height: 13px;
   border: 1.5px solid #cccccc;
   border-radius: 3px;
   flex-shrink: 0;
 }
 
 .a4-word__meaning {
-  font-size: 14px;
+  font-size: 12px;
   color: #666666;
 }
 
 .a4-word__example {
-  font-size: 13px;
+  font-size: 11px;
   color: #444444;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .a4-word__example-jp {
@@ -222,11 +226,11 @@
 }
 
 .a4-grammar-pattern {
-  font-size: 24px;
+  font-size: 19px;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 8px;
-  min-height: 26px;
+  margin-bottom: 6px;
+  min-height: 22px;
 }
 
 .a4-grammar-pattern--jp {
@@ -240,20 +244,20 @@
 
 .a4-field__label {
   display: block;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
   color: #999999;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .a4-field__value {
   display: block;
-  font-size: 19px;
+  font-size: 15px;
   color: #222222;
   line-height: 1.4;
-  min-height: 20px;
+  min-height: 18px;
 }
 
 .a4-field__value--jp {
@@ -262,7 +266,7 @@
 
 .a4-field__value--standalone {
   margin-bottom: 8px;
-  font-size: 17px;
+  font-size: 14px;
   white-space: pre-wrap;
 }
 
@@ -285,7 +289,7 @@
 
 .a4-review__item::before {
   content: counter(review-count) ".";
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--color-accent);
   flex-shrink: 0;
@@ -296,9 +300,9 @@
 }
 
 .a4-review__text {
-  font-size: 17px;
+  font-size: 14px;
   color: #333333;
-  min-height: 24px;
+  min-height: 20px;
   flex: 1;
 }
 
