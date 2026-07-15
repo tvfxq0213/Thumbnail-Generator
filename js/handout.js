@@ -33,17 +33,15 @@ const dom = {
   loadingOverlay: document.getElementById("loadingOverlay"),
 };
 
-const MIN_BLANK_BOXES = 6;
-const MAX_BLANK_BOXES = 20;
-const DEFAULT_BLANK_BOXES = 10;
 const CIRCLED_NUMBERS = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳";
+const MEMORIZE_CHECK_COUNT = 3;
 
 /* ==========================================================================
    State
    ========================================================================== */
 
-const words = [{ kanji: "", meaning: "", example: "" }];
-const grammars = [{ pattern: "", example: "" }];
+const words = [{ kanji: "", meaning: "", example: "", exampleTranslation: "" }];
+const grammars = [{ pattern: "", example: "", exampleTranslation: "" }];
 
 /* ==========================================================================
    Shared Helpers
@@ -184,6 +182,18 @@ function renderWordEntries() {
       })
     );
 
+    entry.appendChild(
+      createTextareaGroup({
+        labelText: "예문 해석",
+        value: word.exampleTranslation,
+        placeholder: "예: 벚꽃 개화는 언제입니까?",
+        onInput: (value) => {
+          word.exampleTranslation = value;
+          updatePreview();
+        },
+      })
+    );
+
     dom.wordEntries.appendChild(entry);
   });
 }
@@ -235,6 +245,18 @@ function renderGrammarEntries() {
       })
     );
 
+    entry.appendChild(
+      createTextareaGroup({
+        labelText: "예문 해석",
+        value: grammar.exampleTranslation,
+        placeholder: "예: 혼자서 할 수 있게 되었습니다.",
+        onInput: (value) => {
+          grammar.exampleTranslation = value;
+          updatePreview();
+        },
+      })
+    );
+
     dom.grammarEntries.appendChild(entry);
   });
 }
@@ -243,24 +265,18 @@ function renderGrammarEntries() {
    Preview Module
    ========================================================================== */
 
-/** 예문 텍스트에서 빈칸 연습용 글자 수를 센다 (공백 제외) */
-function countPracticeChars(text) {
-  return text.replace(/[\s　]/g, "").length;
-}
+/** 암기 확인용 체크 박스 3칸을 생성한다 */
+function createCheckRow() {
+  const row = document.createElement("div");
+  row.className = "a4-check-row";
 
-/** 빈칸 연습 박스(원고지 스타일)를 렌더링한다 */
-function renderBlankBoxes(container, text) {
-  const charCount = countPracticeChars(text);
-  const count = charCount
-    ? Math.min(MAX_BLANK_BOXES, Math.max(MIN_BLANK_BOXES, charCount))
-    : DEFAULT_BLANK_BOXES;
-
-  container.innerHTML = "";
-  for (let i = 0; i < count; i += 1) {
+  for (let i = 0; i < MEMORIZE_CHECK_COUNT; i += 1) {
     const box = document.createElement("span");
-    box.className = "a4-box";
-    container.appendChild(box);
+    box.className = "a4-check-box";
+    row.appendChild(box);
   }
+
+  return row;
 }
 
 /** 라벨 + 값 한 줄(a4-field)을 생성한다 */
@@ -302,14 +318,12 @@ function renderPreviewWords() {
     kanji.textContent = word.kanji.trim() || (index === 0 ? "開花" : "");
     wordRow.appendChild(kanji);
 
+    wordRow.appendChild(createCheckRow());
+
     block.appendChild(wordRow);
     block.appendChild(createPreviewField("뜻", word.meaning.trim()));
     block.appendChild(createPreviewField("예문", word.example.trim(), true));
-
-    const blank = document.createElement("div");
-    blank.className = "a4-blank-line";
-    renderBlankBoxes(blank, word.example);
-    block.appendChild(blank);
+    block.appendChild(createPreviewField("해석", word.exampleTranslation.trim()));
 
     dom.previewWords.appendChild(block);
   });
@@ -338,11 +352,7 @@ function renderPreviewGrammars() {
 
     block.appendChild(patternRow);
     block.appendChild(createPreviewField("예문", grammar.example.trim(), true));
-
-    const blank = document.createElement("div");
-    blank.className = "a4-blank-line";
-    renderBlankBoxes(blank, grammar.example);
-    block.appendChild(blank);
+    block.appendChild(createPreviewField("해석", grammar.exampleTranslation.trim()));
 
     dom.previewGrammars.appendChild(block);
   });
@@ -508,13 +518,13 @@ function bindEvents() {
   );
 
   dom.addWordBtn.addEventListener("click", () => {
-    words.push({ kanji: "", meaning: "", example: "" });
+    words.push({ kanji: "", meaning: "", example: "", exampleTranslation: "" });
     renderWordEntries();
     updatePreview();
   });
 
   dom.addGrammarBtn.addEventListener("click", () => {
-    grammars.push({ pattern: "", example: "" });
+    grammars.push({ pattern: "", example: "", exampleTranslation: "" });
     renderGrammarEntries();
     updatePreview();
   });

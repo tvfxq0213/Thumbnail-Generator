@@ -156,7 +156,7 @@
 
 .a4-word {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
   margin-bottom: 14px;
 }
@@ -172,6 +172,21 @@
   font-size: 30px;
   font-weight: 700;
   color: #1a1a1a;
+}
+
+/* --- Memorization check boxes --- */
+.a4-check-row {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.a4-check-box {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid #cccccc;
+  border-radius: 3px;
+  flex-shrink: 0;
 }
 
 /* --- Grammar pattern --- */
@@ -224,22 +239,6 @@
 
 .a4-field__value--standalone {
   margin-bottom: 14px;
-}
-
-/* --- Blank practice boxes (genkouyoushi style) --- */
-.a4-blank-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
-}
-
-.a4-box {
-  width: 32px;
-  height: 32px;
-  border: 1.5px solid #cccccc;
-  border-radius: 3px;
-  flex-shrink: 0;
 }
 
 /* --- Review list --- */
