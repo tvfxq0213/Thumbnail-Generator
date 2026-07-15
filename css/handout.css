@@ -247,6 +247,7 @@
   display: block;
   font-size: 12px;
   line-height: 1.2;
+  margin-top:4px;
   color: #666666;
 }
 
@@ -322,7 +323,6 @@
   align-items: flex-end;
   gap: 10px;
   counter-increment: review-count;
-  border-bottom: 1px solid #cccccc;
   padding-bottom: 4px;
 }
 
