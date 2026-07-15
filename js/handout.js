@@ -9,7 +9,8 @@
 
 const dom = {
   brandText: document.getElementById("brandText"),
-  dateText: document.getElementById("dateText"),
+  episodeNumber: document.getElementById("episodeNumber"),
+  difficultyStars: document.getElementById("difficultyStars"),
   wordEntries: document.getElementById("wordEntries"),
   addWordBtn: document.getElementById("addWordBtn"),
   grammarEntries: document.getElementById("grammarEntries"),
@@ -18,16 +19,22 @@ const dom = {
   review2: document.getElementById("review2"),
   review3: document.getElementById("review3"),
   cultureNote: document.getElementById("cultureNote"),
+  qrImage: document.getElementById("qrImage"),
 
   handout: document.getElementById("handout"),
   previewBrand: document.getElementById("previewBrand"),
-  previewDate: document.getElementById("previewDate"),
+  previewEpisode: document.getElementById("previewEpisode"),
+  previewDifficulty: document.getElementById("previewDifficulty"),
+  previewDifficultyStars: document.getElementById("previewDifficultyStars"),
   previewWords: document.getElementById("previewWords"),
   previewGrammars: document.getElementById("previewGrammars"),
   previewReviewDivider: document.getElementById("previewReviewDivider"),
   previewReviewSection: document.getElementById("previewReviewSection"),
   previewReviewList: document.getElementById("previewReviewList"),
+  previewCultureDivider: document.getElementById("previewCultureDivider"),
+  previewCultureSection: document.getElementById("previewCultureSection"),
   previewCultureNote: document.getElementById("previewCultureNote"),
+  previewQr: document.getElementById("previewQr"),
 
   savePdfBtn: document.getElementById("savePdfBtn"),
   loadingOverlay: document.getElementById("loadingOverlay"),
@@ -35,6 +42,8 @@ const dom = {
 
 const CIRCLED_NUMBERS = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳";
 const MEMORIZE_CHECK_COUNT = 3;
+const MAX_DIFFICULTY = 5;
+const CULTURE_NOTE_ALLOWED_TAGS = /&lt;(\/?)(b|strong|br)\s*\/?&gt;/gi;
 
 /* ==========================================================================
    State
@@ -42,6 +51,7 @@ const MEMORIZE_CHECK_COUNT = 3;
 
 const words = [{ kanji: "", meaning: "", example: "", exampleTranslation: "" }];
 const grammars = [{ pattern: "", example: "", exampleTranslation: "" }];
+let difficulty = 0;
 
 /* ==========================================================================
    Shared Helpers
@@ -50,6 +60,24 @@ const grammars = [{ pattern: "", example: "", exampleTranslation: "" }];
 /** n번째 항목의 원문자 번호를 반환한다 (21 이상은 "N."로 대체) */
 function circledNumber(n) {
   return n <= CIRCLED_NUMBERS.length ? CIRCLED_NUMBERS[n - 1] : `${n}.`;
+}
+
+/** 회차 번호를 "No.001" 형식으로 변환한다 */
+function formatEpisodeNumber(value) {
+  const num = Number.parseInt(value, 10);
+  if (!Number.isFinite(num) || num < 0) {
+    return "";
+  }
+  return `No.${String(num).padStart(3, "0")}`;
+}
+
+/**
+ * 일본 문화 알아보기 입력값을 이스케이프한 뒤, 허용된 태그(b, strong, br)만
+ * 다시 HTML로 되살린다. 그 외 입력은 항상 순수 텍스트로만 렌더링된다.
+ */
+function sanitizeCultureNote(text) {
+  const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return escaped.replace(CULTURE_NOTE_ALLOWED_TAGS, (match, closing, tag) => `<${closing}${tag.toLowerCase()}>`);
 }
 
 /** 라벨 + input 한 줄을 생성한다 */
@@ -116,6 +144,29 @@ function createEntryHeader({ labelText, canRemove, onRemove }) {
   }
 
   return header;
+}
+
+/* ==========================================================================
+   Form Rendering — 난이도 별점
+   ========================================================================== */
+
+/** 난이도 별점 선택 버튼 5개를 렌더링한다 (같은 별을 다시 누르면 초기화) */
+function renderDifficultyStars() {
+  dom.difficultyStars.innerHTML = "";
+
+  for (let i = 1; i <= MAX_DIFFICULTY; i += 1) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "star-btn";
+    btn.textContent = i <= difficulty ? "★" : "☆";
+    btn.setAttribute("aria-label", `난이도 ${i}`);
+    btn.addEventListener("click", () => {
+      difficulty = difficulty === i ? 0 : i;
+      renderDifficultyStars();
+      updatePreview();
+    });
+    dom.difficultyStars.appendChild(btn);
+  }
 }
 
 /* ==========================================================================
@@ -279,20 +330,28 @@ function createCheckRow() {
   return row;
 }
 
-/** 라벨 + 값 한 줄(a4-field)을 생성한다 */
-function createPreviewField(labelText, value, isJp) {
+/** 예문 + 해석을 한 줄로 합쳐 렌더링한다 (단어/문법 공용) */
+function createExampleLine(example, translation) {
+  if (!example && !translation) {
+    return null;
+  }
+
   const p = document.createElement("p");
-  p.className = "a4-field";
+  p.className = "a4-example-line";
 
-  const label = document.createElement("span");
-  label.className = "a4-field__label";
-  label.textContent = labelText;
-  p.appendChild(label);
+  if (example) {
+    const jp = document.createElement("span");
+    jp.className = "a4-example-line--jp";
+    jp.textContent = example;
+    p.appendChild(jp);
+  }
 
-  const val = document.createElement("span");
-  val.className = `a4-field__value ${isJp ? "a4-field__value--jp" : ""}`.trim();
-  val.textContent = value;
-  p.appendChild(val);
+  if (translation) {
+    const tr = document.createElement("span");
+    tr.className = "a4-example-line__tr";
+    tr.textContent = ` — ${translation}`;
+    p.appendChild(tr);
+  }
 
   return p;
 }
@@ -332,26 +391,8 @@ function renderPreviewWords() {
 
     block.appendChild(wordRow);
 
-    const example = word.example.trim();
-    const translation = word.exampleTranslation.trim();
-    if (example || translation) {
-      const exampleLine = document.createElement("p");
-      exampleLine.className = "a4-word__example";
-
-      if (example) {
-        const jp = document.createElement("span");
-        jp.className = "a4-word__example-jp";
-        jp.textContent = example;
-        exampleLine.appendChild(jp);
-      }
-
-      if (translation) {
-        const tr = document.createElement("span");
-        tr.className = "a4-word__example-tr";
-        tr.textContent = ` — ${translation}`;
-        exampleLine.appendChild(tr);
-      }
-
+    const exampleLine = createExampleLine(word.example.trim(), word.exampleTranslation.trim());
+    if (exampleLine) {
       block.appendChild(exampleLine);
     }
 
@@ -381,8 +422,11 @@ function renderPreviewGrammars() {
     patternRow.appendChild(pattern);
 
     block.appendChild(patternRow);
-    block.appendChild(createPreviewField("예문", grammar.example.trim(), true));
-    block.appendChild(createPreviewField("해석", grammar.exampleTranslation.trim()));
+
+    const exampleLine = createExampleLine(grammar.example.trim(), grammar.exampleTranslation.trim());
+    if (exampleLine) {
+      block.appendChild(exampleLine);
+    }
 
     dom.previewGrammars.appendChild(block);
   });
@@ -411,16 +455,32 @@ function renderPreviewReviews() {
   });
 }
 
+/** 난이도 별점 미리보기를 렌더링한다 (설정하지 않으면 숨김) */
+function renderPreviewDifficulty() {
+  dom.previewDifficulty.hidden = difficulty === 0;
+  dom.previewDifficultyStars.textContent =
+    "★".repeat(difficulty) + "☆".repeat(MAX_DIFFICULTY - difficulty);
+}
+
 /** 미리보기를 실시간 업데이트한다 */
 function updatePreview() {
   dom.previewBrand.textContent = dom.brandText.value.trim() || "NHK EASY NEWS";
-  dom.previewDate.textContent = dom.dateText.value.trim();
+  dom.previewEpisode.textContent = formatEpisodeNumber(dom.episodeNumber.value);
 
+  renderPreviewDifficulty();
   renderPreviewWords();
   renderPreviewGrammars();
   renderPreviewReviews();
+  renderPreviewCulture();
+}
 
-  dom.previewCultureNote.textContent = dom.cultureNote.value.trim();
+/** 일본 문화 알아보기 내용이 없으면 구분선과 섹션을 함께 숨긴다 */
+function renderPreviewCulture() {
+  const note = dom.cultureNote.value.trim();
+
+  dom.previewCultureDivider.hidden = !note;
+  dom.previewCultureSection.hidden = !note;
+  dom.previewCultureNote.innerHTML = sanitizeCultureNote(note);
 }
 
 /* ==========================================================================
@@ -476,7 +536,7 @@ function createExportClone() {
 
 /** 다운로드 파일명을 생성한다 */
 function generateFilename() {
-  const raw = dom.dateText.value.trim() || words[0]?.kanji.trim() || "handout";
+  const raw = formatEpisodeNumber(dom.episodeNumber.value) || words[0]?.kanji.trim() || "handout";
   const safe = raw.replace(/\s+/g, "_").replace(/[^\w가-힣ㄱ-ㆎ.-]/g, "");
   return `Study_Japanese_${safe || "handout"}.pdf`;
 }
@@ -540,8 +600,24 @@ async function exportPdf() {
    Event Handlers
    ========================================================================== */
 
+/** QR 코드 이미지 업로드를 처리한다 */
+function handleQrUpload(file) {
+  if (!file) {
+    dom.previewQr.hidden = true;
+    dom.previewQr.removeAttribute("src");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    dom.previewQr.src = reader.result;
+    dom.previewQr.hidden = false;
+  };
+  reader.readAsDataURL(file);
+}
+
 function bindEvents() {
-  [dom.brandText, dom.dateText, dom.review1, dom.review2, dom.review3, dom.cultureNote].forEach(
+  [dom.brandText, dom.episodeNumber, dom.review1, dom.review2, dom.review3, dom.cultureNote].forEach(
     (input) => {
       input.addEventListener("input", updatePreview);
     }
@@ -559,6 +635,10 @@ function bindEvents() {
     updatePreview();
   });
 
+  dom.qrImage.addEventListener("change", () => {
+    handleQrUpload(dom.qrImage.files[0]);
+  });
+
   dom.savePdfBtn.addEventListener("click", exportPdf);
 }
 
@@ -567,6 +647,7 @@ function bindEvents() {
    ========================================================================== */
 
 function init() {
+  renderDifficultyStars();
   renderWordEntries();
   renderGrammarEntries();
   bindEvents();

@@ -38,8 +38,13 @@
           </div>
 
           <div class="form__group">
-            <label class="form__label" for="dateText">날짜 / 회차 (선택)</label>
-            <input class="form__input" type="text" id="dateText" placeholder="예: 2026.07.13 또는 Day 23" maxlength="30">
+            <label class="form__label" for="episodeNumber">회차 번호 (선택)</label>
+            <input class="form__input" type="number" id="episodeNumber" placeholder="예: 1" min="0" max="999">
+          </div>
+
+          <div class="form__group">
+            <label class="form__label">오늘의 난이도</label>
+            <div class="star-rating" id="difficultyStars" role="radiogroup" aria-label="오늘의 난이도"></div>
           </div>
 
           <fieldset class="form__fieldset">
@@ -55,20 +60,20 @@
           </fieldset>
 
           <fieldset class="form__fieldset">
-            <legend class="form__legend">③ 오늘의 복습 (선택 입력)</legend>
+            <legend class="form__legend">③ 오늘의 핵심 문장 (선택 입력)</legend>
 
             <div class="form__group">
-              <label class="form__label" for="review1">복습 1</label>
+              <label class="form__label" for="review1">문장 1</label>
               <input class="form__input" type="text" id="review1" placeholder="비워두면 빈 줄로 표시됩니다" maxlength="60">
             </div>
 
             <div class="form__group">
-              <label class="form__label" for="review2">복습 2</label>
+              <label class="form__label" for="review2">문장 2</label>
               <input class="form__input" type="text" id="review2" placeholder="비워두면 빈 줄로 표시됩니다" maxlength="60">
             </div>
 
             <div class="form__group">
-              <label class="form__label" for="review3">복습 3</label>
+              <label class="form__label" for="review3">문장 3</label>
               <input class="form__input" type="text" id="review3" placeholder="비워두면 빈 줄로 표시됩니다" maxlength="60">
             </div>
           </fieldset>
@@ -77,8 +82,17 @@
             <legend class="form__legend">④ 일본 문화 알아보기</legend>
 
             <div class="form__group">
-              <label class="form__label" for="cultureNote">내용</label>
-              <textarea class="form__input form__textarea" id="cultureNote" rows="3" placeholder="예: 일본의 오봉(お盆) 명절과 성묘 풍습에 대해" maxlength="300"></textarea>
+              <label class="form__label" for="cultureNote">내용 (&lt;b&gt;굵게&lt;/b&gt;, &lt;br&gt; 줄바꿈 태그 사용 가능)</label>
+              <textarea class="form__input form__textarea" id="cultureNote" rows="3" placeholder="예: 일본의 &lt;b&gt;오봉(お盆)&lt;/b&gt; 명절과 성묘 풍습에 대해" maxlength="300"></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">⑤ QR 코드 (선택)</legend>
+
+            <div class="form__group">
+              <label class="form__label" for="qrImage">블로그 QR 코드 이미지</label>
+              <input class="form__input" type="file" id="qrImage" accept="image/*">
             </div>
           </fieldset>
 
@@ -97,8 +111,14 @@
         <div class="a4-scale">
           <article class="a4-page" id="handout" aria-label="핸드아웃 미리보기">
             <header class="a4-page__header">
-              <span class="a4-page__brand" id="previewBrand">NHK EASY NEWS</span>
-              <span class="a4-page__date" id="previewDate"></span>
+              <div class="a4-page__header-top">
+                <span class="a4-page__brand" id="previewBrand">NHK EASY NEWS</span>
+                <span class="a4-page__episode" id="previewEpisode"></span>
+              </div>
+              <div class="a4-page__difficulty" id="previewDifficulty" hidden>
+                <span class="a4-page__difficulty-label">오늘의 난이도</span>
+                <span class="a4-page__difficulty-stars" id="previewDifficultyStars"></span>
+              </div>
             </header>
 
             <section class="a4-section">
@@ -116,16 +136,18 @@
             <hr class="a4-divider" id="previewReviewDivider">
 
             <section class="a4-section" id="previewReviewSection">
-              <h3 class="a4-section__title">오늘의 복습</h3>
+              <h3 class="a4-section__title">오늘의 핵심 문장</h3>
               <ol class="a4-review" id="previewReviewList"></ol>
             </section>
 
-            <hr class="a4-divider">
+            <hr class="a4-divider" id="previewCultureDivider">
 
-            <section class="a4-section">
+            <section class="a4-section" id="previewCultureSection">
               <h3 class="a4-section__title">일본 문화 알아보기</h3>
               <p class="a4-field__value a4-field__value--standalone" id="previewCultureNote"></p>
             </section>
+
+            <img class="a4-qr" id="previewQr" alt="블로그 QR 코드" hidden>
 
             <p class="copyright">날개공방 : <a href="https://blog.naver.com/alas0213/">https://blog.naver.com/alas0213/</a> </p>
           </article>

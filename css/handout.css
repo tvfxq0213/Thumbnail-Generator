@@ -68,6 +68,22 @@
   padding: 0.5rem 1rem;
 }
 
+/* --- Difficulty star rating (form) --- */
+.star-rating {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #f0a500;
+  cursor: pointer;
+}
+
 /* --- Preview wrapper --- */
 .preview--a4 {
   padding: 1.5rem;
@@ -102,11 +118,17 @@
 .a4-page__header {
   flex-shrink: 0;
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--color-accent);
+  margin-bottom: 14px;
+}
+
+.a4-page__header-top {
+  display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding-bottom: 12px;
-  border-bottom: 3px solid var(--color-accent);
-  margin-bottom: 18px;
 }
 
 .a4-page__brand {
@@ -116,10 +138,28 @@
   color: var(--color-accent);
 }
 
-.a4-page__date {
-  font-size: 13px;
-  font-weight: 500;
-  color: #888888;
+.a4-page__episode {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+
+.a4-page__difficulty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.a4-page__difficulty-label {
+  font-size: 11px;
+  color: #999999;
+}
+
+.a4-page__difficulty-stars {
+  font-size: 14px;
+  color: #f0a500;
+  letter-spacing: 1px;
 }
 
 /* --- Section --- */
@@ -210,57 +250,47 @@
   color: #666666;
 }
 
-.a4-word__example {
+.a4-example-line {
   font-size: 11px;
   color: #444444;
-  line-height: 1.35;
+  line-height: 1.3;
+  margin-top: 2px;
 }
 
-.a4-word__example-jp {
+.a4-example-line--jp {
   font-family: var(--font-jp);
   display: block;
 }
 
-.a4-word__example-tr {
+.a4-example-line__tr {
   color: #999999;
 }
 
 /* --- Grammar pattern --- */
 .a4-grammar-block {
-  margin-bottom: 14px;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px dashed #e0e0e0;
 }
 
 .a4-grammar-block:last-child {
+  padding-bottom: 0;
   margin-bottom: 0;
+  border-bottom: none;
 }
 
 .a4-grammar-pattern {
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 6px;
-  min-height: 22px;
+  line-height: 1.2;
 }
 
 .a4-grammar-pattern--jp {
   font-family: var(--font-jp);
 }
 
-/* --- Label / value field --- */
-.a4-field {
-  margin-bottom: 8px;
-}
-
-.a4-field__label {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  color: #999999;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 3px;
-}
-
+/* --- Label / value field (일본 문화 알아보기에서 사용) --- */
 .a4-field__value {
   display: block;
   font-size: 15px;
@@ -313,6 +343,16 @@
   color: #333333;
   min-height: 20px;
   flex: 1;
+}
+
+/* --- Blog QR code --- */
+.a4-qr {
+  position: absolute;
+  right: 0;
+  bottom: 18px;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
 }
 
 .copyright{
