@@ -239,6 +239,7 @@
 
 .a4-field__value--standalone {
   margin-bottom: 14px;
+  white-space: pre-wrap;
 }
 
 /* --- Review list --- */
