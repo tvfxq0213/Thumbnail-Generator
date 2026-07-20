@@ -1,0 +1,96 @@
+/* ==========================================================================
+   월간 일본어 복습 테스트 생성기 — A4 Test Sheet Styles
+   (style.css / handout.css의 공통 변수·카드·폼·A4 페이지 스타일 위에 얹어서 사용)
+   ========================================================================== */
+
+/* --- Header --- */
+.test-header {
+  display: block;
+}
+
+.test-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--color-accent);
+  text-align: center;
+}
+
+/* --- ① 단어 시험 (2열 그리드) --- */
+.test-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 14px;
+  row-gap: 6px;
+}
+
+.test-word-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 5px 7px;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+}
+
+.test-word-item__num {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.test-word-item__prompt {
+  font-size: 13px;
+  color: #222222;
+  flex-shrink: 0;
+}
+
+/* --- ②③④ 목록형 문제 --- */
+.test-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.test-list__item {
+  display: flex;
+  gap: 8px;
+}
+
+.test-list__num {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.test-list__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.test-list__prompt {
+  font-size: 14px;
+  color: #222222;
+  line-height: 1.4;
+}
+
+.test-list__prompt--jp {
+  font-family: var(--font-jp);
+}
+
+.test-list__hint {
+  font-size: 11px;
+  color: #999999;
+  margin-top: 2px;
+}
+
+/* --- 답안 작성용 빈 줄 --- */
+.test-blank-line {
+  border-bottom: 1px solid #cccccc;
+  height: 22px;
+  margin-top: 4px;
+}

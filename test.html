@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>월간 일본어 복습 테스트 생성기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/handout.css">
+  <link rel="stylesheet" href="css/test.css">
+</head>
+<body class="app app--light app--theme-green">
+  <div class="app__overlay" id="loadingOverlay" hidden aria-hidden="true">
+    <div class="app__spinner" role="status" aria-label="PDF 생성 중"></div>
+    <p class="app__loading-text">PDF 생성 중…</p>
+  </div>
+
+  <header class="app__header">
+    <div class="app__header-inner">
+      <h1 class="app__title">월간 일본어 복습 테스트 생성기</h1>
+      <div class="app__header-actions">
+        <a class="btn btn--secondary" href="handout.html">핸드아웃 만들기 →</a>
+        <a class="btn btn--secondary" href="index.html">썸네일 생성기 →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="app__main">
+    <section class="panel panel--form" aria-labelledby="formTitle">
+      <div class="card">
+        <h2 class="card__title" id="formTitle">테스트 정보 입력</h2>
+
+        <form class="form" id="testForm" novalidate>
+          <div class="form__group">
+            <label class="form__label" for="reviewMonth">복습할 월</label>
+            <input class="form__input" type="text" id="reviewMonth" placeholder="예: 7월" maxlength="20">
+          </div>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">① 단어 시험</legend>
+            <div class="repeat-list" id="wordTestEntries"></div>
+            <button type="button" class="btn btn--add" id="addWordTestBtn">+ 문제 추가</button>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">② 예문 빈칸 채우기</legend>
+            <div class="repeat-list" id="fillBlankEntries"></div>
+            <button type="button" class="btn btn--add" id="addFillBlankBtn">+ 문제 추가</button>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">③ 예문 해석하기</legend>
+            <div class="repeat-list" id="translateEntries"></div>
+            <button type="button" class="btn btn--add" id="addTranslateBtn">+ 문제 추가</button>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">④ 복습 문장 작문하기</legend>
+            <div class="repeat-list" id="composeEntries"></div>
+            <button type="button" class="btn btn--add" id="addComposeBtn">+ 문제 추가</button>
+          </fieldset>
+
+          <div class="form__actions">
+            <button type="button" class="btn btn--primary" id="savePdfBtn">
+              <span class="btn__label">PDF 다운로드</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="panel panel--preview" aria-labelledby="previewTitleLabel">
+      <h2 class="panel__title" id="previewTitleLabel">미리보기 (A4)</h2>
+      <div class="preview preview--a4">
+        <div class="a4-scale">
+          <article class="a4-page" id="testSheet" aria-label="복습 테스트 미리보기">
+            <header class="a4-page__header test-header">
+              <h1 class="test-title" id="previewTitle">이달의 일본어 복습하기</h1>
+            </header>
+
+            <section class="a4-section" id="wordTestSection">
+              <h3 class="a4-section__title">① 단어 시험</h3>
+              <div id="previewWordTests" class="test-grid"></div>
+            </section>
+
+            <hr class="a4-divider" id="fillBlankDivider">
+
+            <section class="a4-section" id="fillBlankSection">
+              <h3 class="a4-section__title">② 예문 빈칸 채우기</h3>
+              <ol class="test-list" id="previewFillBlanks"></ol>
+            </section>
+
+            <hr class="a4-divider" id="translateDivider">
+
+            <section class="a4-section" id="translateSection">
+              <h3 class="a4-section__title">③ 예문 해석하기</h3>
+              <ol class="test-list" id="previewTranslates"></ol>
+            </section>
+
+            <hr class="a4-divider" id="composeDivider">
+
+            <section class="a4-section" id="composeSection">
+              <h3 class="a4-section__title">④ 복습 문장 작문하기</h3>
+              <ol class="test-list" id="previewComposes"></ol>
+            </section>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <script src="js/test.js" type="module"></script>
+</body>
+</html>
