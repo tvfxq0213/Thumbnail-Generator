@@ -50,6 +50,15 @@
 
           <fieldset class="form__fieldset">
             <legend class="form__legend">① 오늘의 핵심 단어</legend>
+
+            <details class="json-import">
+              <summary class="json-import__summary">JSON으로 일괄 입력</summary>
+              <div class="form__group">
+                <textarea class="form__input form__textarea json-import__textarea" id="wordJsonInput" rows="4" placeholder='[{"kanji":"開花","meaning":"개화, 꽃이 핌","example":"桜の開花はいつですか。","exampleTranslation":"벚꽃 개화는 언제입니까?"}]'></textarea>
+              </div>
+              <button type="button" class="btn btn--add" id="applyWordJsonBtn">JSON 적용 (기존 목록 대체)</button>
+            </details>
+
             <div class="repeat-list" id="wordEntries"></div>
             <button type="button" class="btn btn--add" id="addWordBtn">+ 단어 추가</button>
           </fieldset>

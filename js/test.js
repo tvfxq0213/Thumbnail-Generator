@@ -12,6 +12,8 @@ const dom = {
 
   wordTestEntries: document.getElementById("wordTestEntries"),
   addWordTestBtn: document.getElementById("addWordTestBtn"),
+  wordTestJsonInput: document.getElementById("wordTestJsonInput"),
+  applyWordTestJsonBtn: document.getElementById("applyWordTestJsonBtn"),
   fillBlankEntries: document.getElementById("fillBlankEntries"),
   addFillBlankBtn: document.getElementById("addFillBlankBtn"),
   translateEntries: document.getElementById("translateEntries"),
@@ -166,6 +168,45 @@ function renderRepeatList({ container, items, labelPrefix, fields }) {
 /* ==========================================================================
    Form Rendering
    ========================================================================== */
+
+/** JSON 항목 하나를 단어 시험 문제(prompt)로 정규화한다 (문자열/객체 모두 허용) */
+function normalizeWordTestItem(raw) {
+  if (typeof raw === "string") {
+    const prompt = raw.trim();
+    return prompt ? { prompt } : null;
+  }
+
+  if (!raw || typeof raw !== "object") {
+    return null;
+  }
+
+  const prompt = String(raw.prompt ?? raw.word ?? raw.단어 ?? raw.뜻 ?? raw["문제"] ?? "").trim();
+  return prompt ? { prompt } : null;
+}
+
+/** JSON 붙여넣기 입력을 파싱해 단어 시험 문제 목록 전체를 교체한다 */
+function applyWordTestJson() {
+  let parsed;
+  try {
+    parsed = JSON.parse(dom.wordTestJsonInput.value);
+  } catch (err) {
+    alert("JSON 형식이 올바르지 않습니다. 문법을 확인해 주세요.");
+    return;
+  }
+
+  const list = Array.isArray(parsed) ? parsed : [parsed];
+  const normalized = list.map(normalizeWordTestItem).filter(Boolean);
+
+  if (normalized.length === 0) {
+    alert("가져올 수 있는 문제 항목이 없습니다.");
+    return;
+  }
+
+  wordTests.length = 0;
+  wordTests.push(...normalized);
+  renderWordTestEntries();
+  updatePreview();
+}
 
 function renderWordTestEntries() {
   renderRepeatList({
@@ -535,6 +576,8 @@ function bindEvents() {
     renderWordTestEntries();
     updatePreview();
   });
+
+  dom.applyWordTestJsonBtn.addEventListener("click", applyWordTestJson);
 
   dom.addFillBlankBtn.addEventListener("click", () => {
     fillBlanks.push({ sentence: "", hint: "" });

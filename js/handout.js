@@ -13,6 +13,8 @@ const dom = {
   difficultyStars: document.getElementById("difficultyStars"),
   wordEntries: document.getElementById("wordEntries"),
   addWordBtn: document.getElementById("addWordBtn"),
+  wordJsonInput: document.getElementById("wordJsonInput"),
+  applyWordJsonBtn: document.getElementById("applyWordJsonBtn"),
   grammarEntries: document.getElementById("grammarEntries"),
   addGrammarBtn: document.getElementById("addGrammarBtn"),
   review1: document.getElementById("review1"),
@@ -172,6 +174,50 @@ function renderDifficultyStars() {
 /* ==========================================================================
    Form Rendering — 핵심 단어 / 문법
    ========================================================================== */
+
+/** JSON 항목 하나를 단어 데이터 형태로 정규화한다 (키 이름은 관대하게 허용) */
+function normalizeWordItem(raw) {
+  if (!raw || typeof raw !== "object") {
+    return null;
+  }
+
+  const kanji = String(raw.kanji ?? raw.word ?? raw.단어 ?? "").trim();
+  const meaning = String(raw.meaning ?? raw.뜻 ?? "").trim();
+  const example = String(raw.example ?? raw.예문 ?? "").trim();
+  const exampleTranslation = String(
+    raw.exampleTranslation ?? raw.translation ?? raw.해석 ?? raw["예문 해석"] ?? ""
+  ).trim();
+
+  if (!kanji && !meaning && !example) {
+    return null;
+  }
+
+  return { kanji, meaning, example, exampleTranslation };
+}
+
+/** JSON 붙여넣기 입력을 파싱해 단어 목록 전체를 교체한다 */
+function applyWordJson() {
+  let parsed;
+  try {
+    parsed = JSON.parse(dom.wordJsonInput.value);
+  } catch (err) {
+    alert("JSON 형식이 올바르지 않습니다. 문법을 확인해 주세요.");
+    return;
+  }
+
+  const list = Array.isArray(parsed) ? parsed : [parsed];
+  const normalized = list.map(normalizeWordItem).filter(Boolean);
+
+  if (normalized.length === 0) {
+    alert("가져올 수 있는 단어 항목이 없습니다.");
+    return;
+  }
+
+  words.length = 0;
+  words.push(...normalized);
+  renderWordEntries();
+  updatePreview();
+}
 
 /** 단어 입력 카드 목록을 렌더링한다 */
 function renderWordEntries() {
@@ -628,6 +674,8 @@ function bindEvents() {
     renderWordEntries();
     updatePreview();
   });
+
+  dom.applyWordJsonBtn.addEventListener("click", applyWordJson);
 
   dom.addGrammarBtn.addEventListener("click", () => {
     grammars.push({ pattern: "", example: "", exampleTranslation: "" });

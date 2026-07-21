@@ -41,6 +41,15 @@
 
           <fieldset class="form__fieldset">
             <legend class="form__legend">① 단어 시험</legend>
+
+            <details class="json-import">
+              <summary class="json-import__summary">JSON으로 일괄 입력</summary>
+              <div class="form__group">
+                <textarea class="form__input form__textarea json-import__textarea" id="wordTestJsonInput" rows="4" placeholder='["개화, 꽃이 핌", "장마", "태풍"]'></textarea>
+              </div>
+              <button type="button" class="btn btn--add" id="applyWordTestJsonBtn">JSON 적용 (기존 목록 대체)</button>
+            </details>
+
             <div class="repeat-list" id="wordTestEntries"></div>
             <button type="button" class="btn btn--add" id="addWordTestBtn">+ 문제 추가</button>
           </fieldset>

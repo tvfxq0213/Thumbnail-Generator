@@ -7,6 +7,33 @@
   font-family: var(--font-jp);
 }
 
+/* --- JSON bulk import --- */
+.json-import {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  background: var(--color-bg);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.json-import__summary {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  cursor: pointer;
+  user-select: none;
+}
+
+.json-import__textarea {
+  margin-top: 0.625rem;
+  font-family: monospace;
+  font-size: 0.8125rem;
+}
+
+.json-import .btn--add {
+  margin-top: 0.5rem;
+}
+
 /* --- Repeatable entry list (words / grammar) --- */
 .repeat-list {
   display: flex;

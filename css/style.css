@@ -491,6 +491,7 @@ body {
   color: var(--color-accent);
   border: 1px solid var(--color-accent);
   box-shadow: none;
+  text-decoration: none;
 }
 
 .btn--icon {
