@@ -15,6 +15,7 @@ const STORAGE_KEYS = {
   travelStyle: "nhk_thumb_travel_style",
   dimColor: "nhk_thumb_dim_color",
   handlePosition: "nhk_thumb_handle_position",
+  bookHandlePosition: "nhk_thumb_book_handle_position",
 };
 
 const CATEGORY_OPTIONS = [
@@ -64,13 +65,21 @@ const TRAVEL_TITLE_FONT_RULES = [
   { maxLength: Infinity, size: 66 },
 ];
 
+const BOOK_TITLE_FONT_RULES = [
+  { maxLength: 10, size: 100 },
+  { maxLength: 18, size: 78 },
+  { maxLength: 26, size: 62 },
+  { maxLength: Infinity, size: 52 },
+];
+
 const HANDLE_POSITIONS = ["top-left", "top-right", "bottom-left", "bottom-right"];
 const DEFAULT_HANDLE_POSITION = "bottom-right";
 const TRAVEL_STYLES = ["brand", "qa"];
 const DEFAULT_TRAVEL_STYLE = "brand";
 const DIM_COLORS = ["black", "white"];
 const DEFAULT_DIM_COLOR = "black";
-const MODES = ["jp", "travel"];
+const DEFAULT_BOOK_UNIT = "권";
+const MODES = ["jp", "travel", "book"];
 const DEFAULT_MODE = "jp";
 
 /* ==========================================================================
@@ -121,6 +130,19 @@ const dom = {
   previewTravelSubtitle: document.getElementById("previewTravelSubtitle"),
   previewTravelSeries: document.getElementById("previewTravelSeries"),
   previewTravelHandle: document.getElementById("previewTravelHandle"),
+
+  bookFields: document.getElementById("bookFields"),
+  thumbnailBook: document.getElementById("thumbnailBook"),
+  bookLabel: document.getElementById("bookLabel"),
+  bookTitle: document.getElementById("bookTitle"),
+  bookCount: document.getElementById("bookCount"),
+  bookUnit: document.getElementById("bookUnit"),
+  bookHandle: document.getElementById("bookHandle"),
+  bookHandlePositionPicker: document.getElementById("bookHandlePositionPicker"),
+  previewBookLabel: document.getElementById("previewBookLabel"),
+  previewBookCount: document.getElementById("previewBookCount"),
+  previewBookTitle: document.getElementById("previewBookTitle"),
+  previewBookHandle: document.getElementById("previewBookHandle"),
 };
 
 let currentMode = DEFAULT_MODE;
@@ -159,6 +181,7 @@ function restoreFormValues() {
   const savedTravelStyle = loadFromStorage(STORAGE_KEYS.travelStyle);
   const savedDimColor = loadFromStorage(STORAGE_KEYS.dimColor);
   const savedHandlePosition = loadFromStorage(STORAGE_KEYS.handlePosition);
+  const savedBookHandlePosition = loadFromStorage(STORAGE_KEYS.bookHandlePosition);
 
   setCategory(savedCategory, { persist: false });
   if (savedColorTheme && COLOR_THEMES.includes(savedColorTheme)) {
@@ -179,6 +202,12 @@ function restoreFormValues() {
   setHandlePosition(
     savedHandlePosition && HANDLE_POSITIONS.includes(savedHandlePosition)
       ? savedHandlePosition
+      : DEFAULT_HANDLE_POSITION,
+    { persist: false }
+  );
+  setBookHandlePosition(
+    savedBookHandlePosition && HANDLE_POSITIONS.includes(savedBookHandlePosition)
+      ? savedBookHandlePosition
       : DEFAULT_HANDLE_POSITION,
     { persist: false }
   );
@@ -229,8 +258,10 @@ function setMode(mode, { persist = true } = {}) {
 
   dom.jpFields.hidden = value !== "jp";
   dom.travelFields.hidden = value !== "travel";
+  dom.bookFields.hidden = value !== "book";
   dom.thumbnail.hidden = value !== "jp";
   dom.thumbnailTravel.hidden = value !== "travel";
+  dom.thumbnailBook.hidden = value !== "book";
 
   dom.modeTabs.querySelectorAll(".mode-tabs__btn").forEach((btn) => {
     const isActive = btn.dataset.mode === value;
@@ -346,6 +377,47 @@ function updateTravelPreview() {
 }
 
 /* ==========================================================================
+   Book Thumbnail Module
+   ========================================================================== */
+
+/** 책 콘텐츠 블로그 주소 위치(4모서리)를 적용한다 */
+function setBookHandlePosition(position, { persist = true } = {}) {
+  const value = HANDLE_POSITIONS.includes(position) ? position : DEFAULT_HANDLE_POSITION;
+
+  HANDLE_POSITIONS.forEach((pos) => {
+    dom.previewBookHandle.classList.remove(`thumbnail__book-handle--${pos}`);
+  });
+  dom.previewBookHandle.classList.add(`thumbnail__book-handle--${value}`);
+
+  dom.bookHandlePositionPicker.querySelectorAll(".corner-picker__btn").forEach((btn) => {
+    const isActive = btn.dataset.position === value;
+    btn.classList.toggle("is-active", isActive);
+    btn.setAttribute("aria-pressed", String(isActive));
+  });
+
+  if (persist) {
+    saveToStorage(STORAGE_KEYS.bookHandlePosition, value);
+  }
+}
+
+/** 책 콘텐츠 썸네일 미리보기를 실시간 업데이트한다 */
+function updateBookPreview() {
+  const label = dom.bookLabel.value.trim();
+  const titleRaw = normalizeMultilineText(dom.bookTitle.value);
+  const count = dom.bookCount.value.trim();
+  const unit = dom.bookUnit.value.trim() || DEFAULT_BOOK_UNIT;
+  const handle = dom.bookHandle.value.trim();
+
+  dom.previewBookLabel.textContent = label || "BOOK LIST";
+  dom.previewBookTitle.textContent = titleRaw.trim() || "제목을 입력하세요";
+  dom.previewBookCount.textContent = count ? `${count}${unit}` : "";
+  dom.previewBookHandle.textContent = handle;
+
+  const titleSize = calculateFontSize(titleRaw.trim() || "제목을 입력하세요", BOOK_TITLE_FONT_RULES);
+  dom.previewBookTitle.style.fontSize = `${titleSize}px`;
+}
+
+/* ==========================================================================
    Font Size Module
    ========================================================================== */
 
@@ -420,10 +492,12 @@ function setColorTheme(theme) {
   dom.app.classList.add(`app--theme-${theme}`);
   dom.thumbnail.dataset.theme = theme;
   dom.thumbnailTravel.dataset.theme = theme;
+  dom.thumbnailBook.dataset.theme = theme;
 
   const accent = THEME_COLORS[theme];
   dom.thumbnail.style.setProperty("--thumb-accent", accent);
   dom.thumbnailTravel.style.setProperty("--thumb-accent", accent);
+  dom.thumbnailBook.style.setProperty("--thumb-accent", accent);
 
   dom.colorThemePicker.querySelectorAll(".theme-picker__btn").forEach((btn) => {
     const isActive = btn.dataset.theme === theme;
@@ -515,6 +589,9 @@ function syncCaptureStyles(source, target) {
     [".thumbnail__travel-handle", ["fontFamily", "fontSize", "fontWeight", "color", "backgroundColor"]],
     [".thumbnail__travel-dim", ["backgroundColor", "opacity"]],
     [".thumbnail__travel-bg", ["backgroundImage", "backgroundSize", "backgroundPosition", "backgroundColor"]],
+    [".thumbnail__book-count", ["fontFamily", "fontSize", "fontWeight", "color", "letterSpacing"]],
+    [".thumbnail__book-title", ["fontFamily", "fontSize", "fontWeight", "color", "lineHeight", "letterSpacing", "whiteSpace"]],
+    [".thumbnail__book-handle", ["fontFamily", "fontSize", "fontWeight", "color", "backgroundColor"]],
   ];
 
   pairs.forEach(([selector, props]) => {
@@ -565,6 +642,7 @@ async function ensureFontsReady() {
     '500 32px "Noto Sans JP"',
     "500 30px Pretendard",
     `800 ${calculateFontSize(dom.travelTitle.value, TRAVEL_TITLE_FONT_RULES)}px Pretendard`,
+    `800 ${calculateFontSize(dom.bookTitle.value, BOOK_TITLE_FONT_RULES)}px Pretendard`,
     "600 36px Pretendard",
   ];
 
@@ -595,7 +673,8 @@ async function exportThumbnail(format, showLoader = false) {
   try {
     await ensureFontsReady();
 
-    const activeSource = currentMode === "travel" ? dom.thumbnailTravel : dom.thumbnail;
+    const activeSource =
+      { jp: dom.thumbnail, travel: dom.thumbnailTravel, book: dom.thumbnailBook }[currentMode] || dom.thumbnail;
     const { wrapper, node } = createCaptureNode(activeSource);
     captureRoot = wrapper;
 
@@ -630,8 +709,10 @@ async function exportThumbnail(format, showLoader = false) {
     const ext = format === "png" ? "png" : "jpg";
 
     const dataUrl = canvas.toDataURL(mimeType, quality);
-    const episodeForFilename = currentMode === "travel" ? dom.travelSeries.value : dom.episode.value;
-    const titleForFilename = currentMode === "travel" ? dom.travelTitle.value : dom.koreanTitle.value;
+    const episodeForFilename =
+      { jp: dom.episode.value, travel: dom.travelSeries.value, book: dom.bookCount.value }[currentMode] || "";
+    const titleForFilename =
+      { jp: dom.koreanTitle.value, travel: dom.travelTitle.value, book: dom.bookTitle.value }[currentMode] || "";
     const filename = generateFilename(episodeForFilename, titleForFilename, ext);
 
     downloadDataUrl(dataUrl, filename);
@@ -736,6 +817,19 @@ function bindTravelEvents() {
   });
 }
 
+/** 책 콘텐츠 썸네일 관련 이벤트 */
+function bindBookEvents() {
+  [dom.bookLabel, dom.bookTitle, dom.bookCount, dom.bookUnit, dom.bookHandle].forEach((input) => {
+    input.addEventListener("input", updateBookPreview);
+  });
+
+  dom.bookHandlePositionPicker.addEventListener("click", (e) => {
+    const btn = e.target.closest(".corner-picker__btn");
+    if (!btn) return;
+    setBookHandlePosition(btn.dataset.position);
+  });
+}
+
 /* ==========================================================================
    Init
    ========================================================================== */
@@ -747,8 +841,10 @@ function init() {
   bindExportEvents();
   bindModeEvents();
   bindTravelEvents();
+  bindBookEvents();
   updatePreview();
   updateTravelPreview();
+  updateBookPreview();
   setDimOpacity(dom.dimOpacity.value);
 }
 

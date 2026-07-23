@@ -32,6 +32,7 @@
   <div class="mode-tabs" id="modeTabs" role="tablist" aria-label="썸네일 유형 선택">
     <button type="button" class="mode-tabs__btn is-active" data-mode="jp" role="tab" aria-selected="true">일본어 학습</button>
     <button type="button" class="mode-tabs__btn" data-mode="travel" role="tab" aria-selected="false">여행 콘텐츠</button>
+    <button type="button" class="mode-tabs__btn" data-mode="book" role="tab" aria-selected="false">책 콘텐츠</button>
   </div>
 
   <main class="app__main">
@@ -143,6 +144,45 @@
             </fieldset>
           </div>
 
+          <div class="mode-panel" id="bookFields" data-mode-panel="book" hidden>
+            <div class="form__group">
+              <label class="form__label" for="bookLabel">카테고리 라벨 (선택)</label>
+              <input class="form__input" type="text" id="bookLabel" placeholder="예: 여름 소설 추천" maxlength="40">
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="bookTitle">제목</label>
+              <textarea class="form__input form__textarea" id="bookTitle" rows="3" placeholder="예: 비 오는 날 더 몰입되는 책"></textarea>
+            </div>
+
+            <div class="form__row">
+              <div class="form__group">
+                <label class="form__label" for="bookCount">권수 (선택)</label>
+                <input class="form__input" type="number" id="bookCount" min="0" max="999" placeholder="예: 20">
+              </div>
+
+              <div class="form__group">
+                <label class="form__label" for="bookUnit">단위</label>
+                <input class="form__input" type="text" id="bookUnit" placeholder="권" maxlength="10">
+              </div>
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="bookHandle">블로그 주소</label>
+              <input class="form__input" type="text" id="bookHandle" placeholder="예: blog.naver.com/example" maxlength="60">
+            </div>
+
+            <fieldset class="form__fieldset">
+              <legend class="form__legend">블로그 주소 위치</legend>
+              <div class="corner-picker" id="bookHandlePositionPicker" role="radiogroup" aria-label="블로그 주소 위치 선택">
+                <button type="button" class="corner-picker__btn" data-position="top-left" aria-pressed="false">좌상단</button>
+                <button type="button" class="corner-picker__btn" data-position="top-right" aria-pressed="false">우상단</button>
+                <button type="button" class="corner-picker__btn" data-position="bottom-left" aria-pressed="false">좌하단</button>
+                <button type="button" class="corner-picker__btn is-active" data-position="bottom-right" aria-pressed="true">우하단</button>
+              </div>
+            </fieldset>
+          </div>
+
           <fieldset class="form__fieldset">
             <legend class="form__legend">컬러 테마</legend>
             <div class="theme-picker" id="colorThemePicker" role="radiogroup" aria-label="컬러 테마 선택">
@@ -211,6 +251,30 @@
               <p class="thumbnail__travel-series" id="previewTravelSeries">Day 04</p>
             </div>
             <p class="thumbnail__travel-handle thumbnail__travel-handle--bottom-right" id="previewTravelHandle">blog.naver.com/example</p>
+          </article>
+
+          <article class="thumbnail thumbnail--book" id="thumbnailBook" aria-label="책 썸네일 미리보기" hidden>
+            <div class="thumbnail__inner">
+              <header class="thumbnail__header">
+                <div class="thumbnail__brand">
+                  <span class="thumbnail__logo" aria-hidden="true"></span>
+                  <span class="thumbnail__series" id="previewBookLabel">BOOK LIST</span>
+                </div>
+              </header>
+
+              <hr class="thumbnail__rule" aria-hidden="true">
+
+              <div class="thumbnail__book-body">
+                <p class="thumbnail__book-count" id="previewBookCount"></p>
+                <h3 class="thumbnail__book-title" id="previewBookTitle">제목을 입력하세요</h3>
+              </div>
+
+              <hr class="thumbnail__rule thumbnail__rule--bottom" aria-hidden="true">
+
+              <p class="thumbnail__copyright">© alas0213</p>
+            </div>
+
+            <p class="thumbnail__book-handle thumbnail__book-handle--bottom-right" id="previewBookHandle">blog.naver.com/example</p>
           </article>
         </div>
       </div>
