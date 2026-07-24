@@ -65,6 +65,15 @@
 
           <fieldset class="form__fieldset">
             <legend class="form__legend">② 문법</legend>
+
+            <details class="json-import">
+              <summary class="json-import__summary">JSON으로 일괄 입력</summary>
+              <div class="form__group">
+                <textarea class="form__input form__textarea json-import__textarea" id="grammarJsonInput" rows="4" placeholder='[{"pattern":"～ようになる","example":"一人で出来るようになりました。","exampleTranslation":"혼자서 할 수 있게 되었습니다."}]'></textarea>
+              </div>
+              <button type="button" class="btn btn--add" id="applyGrammarJsonBtn">JSON 적용 (기존 목록 대체)</button>
+            </details>
+
             <div class="repeat-list" id="grammarEntries"></div>
             <button type="button" class="btn btn--add" id="addGrammarBtn">+ 문법 추가</button>
           </fieldset>

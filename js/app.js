@@ -143,6 +143,13 @@ const dom = {
   previewBookCount: document.getElementById("previewBookCount"),
   previewBookTitle: document.getElementById("previewBookTitle"),
   previewBookHandle: document.getElementById("previewBookHandle"),
+  previewBookCovers: document.getElementById("previewBookCovers"),
+  bookCoverSlots: [1, 2, 3].map((n) => ({
+    input: document.getElementById(`bookCoverInput${n}`),
+    upload: document.getElementById(`bookCoverUpload${n}`),
+    removeBtn: document.getElementById(`bookCoverRemove${n}`),
+    previewImg: document.getElementById(`previewBookCover${n}`),
+  })),
 };
 
 let currentMode = DEFAULT_MODE;
@@ -415,6 +422,37 @@ function updateBookPreview() {
 
   const titleSize = calculateFontSize(titleRaw.trim() || "제목을 입력하세요", BOOK_TITLE_FONT_RULES);
   dom.previewBookTitle.style.fontSize = `${titleSize}px`;
+}
+
+/** 책 표지 이미지 슬롯 하나에 업로드된 파일을 적용한다 */
+function handleBookCoverUpload(slot, file) {
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    slot.previewImg.src = reader.result;
+    slot.previewImg.hidden = false;
+    slot.upload.classList.add("has-image");
+    slot.removeBtn.hidden = false;
+    updateBookCoversVisibility();
+  };
+  reader.readAsDataURL(file);
+}
+
+/** 책 표지 이미지 슬롯 하나를 비운다 */
+function removeBookCover(slot) {
+  slot.previewImg.removeAttribute("src");
+  slot.previewImg.hidden = true;
+  slot.upload.classList.remove("has-image");
+  slot.removeBtn.hidden = true;
+  slot.input.value = "";
+  updateBookCoversVisibility();
+}
+
+/** 표지 이미지가 하나라도 있으면 미리보기의 표지 영역을 표시한다 */
+function updateBookCoversVisibility() {
+  const anyVisible = dom.bookCoverSlots.some((slot) => !slot.previewImg.hidden);
+  dom.previewBookCovers.hidden = !anyVisible;
 }
 
 /* ==========================================================================
@@ -827,6 +865,11 @@ function bindBookEvents() {
     const btn = e.target.closest(".corner-picker__btn");
     if (!btn) return;
     setBookHandlePosition(btn.dataset.position);
+  });
+
+  dom.bookCoverSlots.forEach((slot) => {
+    slot.input.addEventListener("change", () => handleBookCoverUpload(slot, slot.input.files[0]));
+    slot.removeBtn.addEventListener("click", () => removeBookCover(slot));
   });
 }
 

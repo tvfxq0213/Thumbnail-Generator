@@ -17,6 +17,8 @@ const dom = {
   applyWordJsonBtn: document.getElementById("applyWordJsonBtn"),
   grammarEntries: document.getElementById("grammarEntries"),
   addGrammarBtn: document.getElementById("addGrammarBtn"),
+  grammarJsonInput: document.getElementById("grammarJsonInput"),
+  applyGrammarJsonBtn: document.getElementById("applyGrammarJsonBtn"),
   review1: document.getElementById("review1"),
   review2: document.getElementById("review2"),
   review3: document.getElementById("review3"),
@@ -293,6 +295,49 @@ function renderWordEntries() {
 
     dom.wordEntries.appendChild(entry);
   });
+}
+
+/** JSON 항목 하나를 문법 데이터 형태로 정규화한다 (키 이름은 관대하게 허용) */
+function normalizeGrammarItem(raw) {
+  if (!raw || typeof raw !== "object") {
+    return null;
+  }
+
+  const pattern = String(raw.pattern ?? raw.문법 ?? raw["문법 패턴"] ?? "").trim();
+  const example = String(raw.example ?? raw.예문 ?? "").trim();
+  const exampleTranslation = String(
+    raw.exampleTranslation ?? raw.translation ?? raw.해석 ?? raw["예문 해석"] ?? ""
+  ).trim();
+
+  if (!pattern && !example) {
+    return null;
+  }
+
+  return { pattern, example, exampleTranslation };
+}
+
+/** JSON 붙여넣기 입력을 파싱해 문법 목록 전체를 교체한다 */
+function applyGrammarJson() {
+  let parsed;
+  try {
+    parsed = JSON.parse(dom.grammarJsonInput.value);
+  } catch (err) {
+    alert("JSON 형식이 올바르지 않습니다. 문법을 확인해 주세요.");
+    return;
+  }
+
+  const list = Array.isArray(parsed) ? parsed : [parsed];
+  const normalized = list.map(normalizeGrammarItem).filter(Boolean);
+
+  if (normalized.length === 0) {
+    alert("가져올 수 있는 문법 항목이 없습니다.");
+    return;
+  }
+
+  grammars.length = 0;
+  grammars.push(...normalized);
+  renderGrammarEntries();
+  updatePreview();
 }
 
 /** 문법 입력 카드 목록을 렌더링한다 */
@@ -682,6 +727,8 @@ function bindEvents() {
     renderGrammarEntries();
     updatePreview();
   });
+
+  dom.applyGrammarJsonBtn.addEventListener("click", applyGrammarJson);
 
   dom.qrImage.addEventListener("change", () => {
     handleQrUpload(dom.qrImage.files[0]);

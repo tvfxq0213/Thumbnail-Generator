@@ -168,6 +168,38 @@
             </div>
 
             <div class="form__group">
+              <label class="form__label">책 표지 이미지 (선택, 최대 3장)</label>
+              <div class="book-cover-uploads">
+                <div class="image-upload book-cover-upload" id="bookCoverUpload1">
+                  <input type="file" accept="image/*" id="bookCoverInput1" class="image-upload__input" hidden>
+                  <label for="bookCoverInput1" class="image-upload__label book-cover-upload__label" id="bookCoverLabel1">
+                    <span class="image-upload__icon">📕</span>
+                    <span>표지 1</span>
+                  </label>
+                  <button type="button" class="image-upload__remove" id="bookCoverRemove1" hidden>제거</button>
+                </div>
+
+                <div class="image-upload book-cover-upload" id="bookCoverUpload2">
+                  <input type="file" accept="image/*" id="bookCoverInput2" class="image-upload__input" hidden>
+                  <label for="bookCoverInput2" class="image-upload__label book-cover-upload__label" id="bookCoverLabel2">
+                    <span class="image-upload__icon">📗</span>
+                    <span>표지 2</span>
+                  </label>
+                  <button type="button" class="image-upload__remove" id="bookCoverRemove2" hidden>제거</button>
+                </div>
+
+                <div class="image-upload book-cover-upload" id="bookCoverUpload3">
+                  <input type="file" accept="image/*" id="bookCoverInput3" class="image-upload__input" hidden>
+                  <label for="bookCoverInput3" class="image-upload__label book-cover-upload__label" id="bookCoverLabel3">
+                    <span class="image-upload__icon">📘</span>
+                    <span>표지 3</span>
+                  </label>
+                  <button type="button" class="image-upload__remove" id="bookCoverRemove3" hidden>제거</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form__group">
               <label class="form__label" for="bookHandle">블로그 주소</label>
               <input class="form__input" type="text" id="bookHandle" placeholder="예: blog.naver.com/example" maxlength="60">
             </div>
@@ -267,6 +299,11 @@
               <div class="thumbnail__book-body">
                 <p class="thumbnail__book-count" id="previewBookCount"></p>
                 <h3 class="thumbnail__book-title" id="previewBookTitle">제목을 입력하세요</h3>
+                <div class="thumbnail__book-covers" id="previewBookCovers" hidden>
+                  <img class="thumbnail__book-cover" id="previewBookCover1" alt="" hidden>
+                  <img class="thumbnail__book-cover" id="previewBookCover2" alt="" hidden>
+                  <img class="thumbnail__book-cover" id="previewBookCover3" alt="" hidden>
+                </div>
               </div>
 
               <hr class="thumbnail__rule thumbnail__rule--bottom" aria-hidden="true">
