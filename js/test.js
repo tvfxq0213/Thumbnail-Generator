@@ -9,6 +9,8 @@
 
 const dom = {
   reviewMonth: document.getElementById("reviewMonth"),
+  autoGenerateJsonInput: document.getElementById("autoGenerateJsonInput"),
+  applyAutoGenerateBtn: document.getElementById("applyAutoGenerateBtn"),
 
   wordTestEntries: document.getElementById("wordTestEntries"),
   addWordTestBtn: document.getElementById("addWordTestBtn"),
@@ -208,6 +210,109 @@ function applyWordTestJson() {
   updatePreview();
 }
 
+/** JSON 항목 하나를 핸드아웃 단어 데이터 형태로 정규화한다 (handout.js와 동일한 키 허용 규칙) */
+function normalizeHandoutWordItem(raw) {
+  if (!raw || typeof raw !== "object") {
+    return null;
+  }
+
+  const kanji = String(raw.kanji ?? raw.word ?? raw.단어 ?? "").trim();
+  const meaning = String(raw.meaning ?? raw.뜻 ?? "").trim();
+  const example = String(raw.example ?? raw.예문 ?? "").trim();
+  const exampleTranslation = String(
+    raw.exampleTranslation ?? raw.translation ?? raw.해석 ?? raw["예문 해석"] ?? ""
+  ).trim();
+
+  if (!kanji && !meaning && !example) {
+    return null;
+  }
+
+  return { kanji, meaning, example, exampleTranslation };
+}
+
+/**
+ * 단어 하나를 무작위로 하나의 문제 유형에 배정한다.
+ * 단어가 가진 정보(뜻/예문/단어)에 따라 만들 수 있는 유형만 후보에 올린다.
+ */
+function pickRandomQuestionFor(word) {
+  const candidates = [];
+
+  if (word.meaning) {
+    candidates.push({ type: "wordTest", value: { prompt: word.meaning } });
+  }
+
+  if (word.example && word.kanji && word.example.includes(word.kanji)) {
+    candidates.push({
+      type: "fillBlank",
+      value: { sentence: word.example.replace(word.kanji, "___"), hint: word.meaning },
+    });
+  }
+
+  if (word.example) {
+    candidates.push({ type: "translate", value: { sentence: word.example } });
+  }
+
+  if (word.kanji) {
+    candidates.push({ type: "compose", value: { prompt: `'${word.kanji}'을 사용해서 문장을 만드세요.` } });
+  }
+
+  if (candidates.length === 0) {
+    return null;
+  }
+
+  return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
+/** 단어 목록을 네 가지 문제 유형으로 무작위 분배한다 */
+function buildQuestionsFromWords(handoutWords) {
+  const result = { wordTest: [], fillBlank: [], translate: [], compose: [] };
+
+  handoutWords.forEach((word) => {
+    const picked = pickRandomQuestionFor(word);
+    if (picked) {
+      result[picked.type].push(picked.value);
+    }
+  });
+
+  return result;
+}
+
+/** 핸드아웃 단어 JSON을 파싱해 네 영역의 문제를 무작위로 자동 생성한다 (기존 목록 전체 대체) */
+function applyAutoGenerateJson() {
+  let parsed;
+  try {
+    parsed = JSON.parse(dom.autoGenerateJsonInput.value);
+  } catch (err) {
+    alert("JSON 형식이 올바르지 않습니다. 문법을 확인해 주세요.");
+    return;
+  }
+
+  const list = Array.isArray(parsed) ? parsed : [parsed];
+  const words = list.map(normalizeHandoutWordItem).filter(Boolean);
+
+  if (words.length === 0) {
+    alert("가져올 수 있는 단어 항목이 없습니다.");
+    return;
+  }
+
+  const generated = buildQuestionsFromWords(words);
+
+  wordTests.length = 0;
+  wordTests.push(...(generated.wordTest.length ? generated.wordTest : [{ prompt: "" }]));
+
+  fillBlanks.length = 0;
+  fillBlanks.push(...(generated.fillBlank.length ? generated.fillBlank : [{ sentence: "", hint: "" }]));
+
+  translates.length = 0;
+  translates.push(...(generated.translate.length ? generated.translate : [{ sentence: "" }]));
+
+  composes.length = 0;
+  composes.push(...(generated.compose.length ? generated.compose : [{ prompt: "" }]));
+
+  renderAllForms();
+  updatePreview();
+}
+
 function renderWordTestEntries() {
   renderRepeatList({
     container: dom.wordTestEntries,
@@ -322,7 +427,7 @@ function renderPreviewWordTests() {
 
     const num = document.createElement("span");
     num.className = "test-word-item__num";
-    num.textContent = circledNumber(index + 1);
+    num.textContent = `${index + 1}.`;
     item.appendChild(num);
 
     const promptEl = document.createElement("span");
@@ -330,7 +435,9 @@ function renderPreviewWordTests() {
     promptEl.textContent = prompt;
     item.appendChild(promptEl);
 
-    item.appendChild(createBlankLine());
+    const blank = document.createElement("span");
+    blank.className = "test-word-item__blank";
+    item.appendChild(blank);
 
     dom.previewWordTests.appendChild(item);
   });
@@ -570,6 +677,8 @@ async function exportPdf() {
 
 function bindEvents() {
   dom.reviewMonth.addEventListener("input", updatePreview);
+
+  dom.applyAutoGenerateBtn.addEventListener("click", applyAutoGenerateJson);
 
   dom.addWordTestBtn.addEventListener("click", () => {
     wordTests.push({ prompt: "" });

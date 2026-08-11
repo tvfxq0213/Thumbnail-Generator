@@ -16,22 +16,19 @@
   text-align: center;
 }
 
-/* --- ① 단어 시험 (2열 그리드) --- */
+/* --- ① 단어 시험 (2열, 번호+뜻+밑줄 형태의 촘촘한 목록) --- */
 .test-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap: 14px;
-  row-gap: 6px;
+  column-gap: 28px;
+  row-gap: 11px;
 }
 
 .test-word-item {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
   min-width: 0;
-  padding: 5px 7px;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
 }
 
 .test-word-item__num {
@@ -44,7 +41,14 @@
 .test-word-item__prompt {
   font-size: 13px;
   color: #222222;
-  flex-shrink: 0;
+}
+
+.test-word-item__blank {
+  flex: 1;
+  min-width: 32px;
+  align-self: stretch;
+  border-bottom: 1px solid #999999;
+  margin-bottom: 2px;
 }
 
 /* --- ②③④ 목록형 문제 --- */

@@ -24,6 +24,13 @@
   user-select: none;
 }
 
+.json-import__hint {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
 .json-import__textarea {
   margin-top: 0.625rem;
   font-family: monospace;

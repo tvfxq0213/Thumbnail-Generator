@@ -39,6 +39,15 @@
             <input class="form__input" type="text" id="reviewMonth" placeholder="예: 7월" maxlength="20">
           </div>
 
+          <details class="json-import">
+            <summary class="json-import__summary">핸드아웃 단어 JSON으로 문제 자동 생성</summary>
+            <p class="json-import__hint">핸드아웃에서 등록했던 단어 JSON을 붙여넣으면 단어별로 ①단어 시험 / ②빈칸 채우기 / ③해석하기 / ④작문하기 중 하나를 무작위로 골라 문제를 만듭니다. 적용하면 아래 네 영역의 기존 목록을 모두 대체합니다.</p>
+            <div class="form__group">
+              <textarea class="form__input form__textarea json-import__textarea" id="autoGenerateJsonInput" rows="4" placeholder='[{"kanji":"開花","meaning":"개화, 꽃이 핌","example":"桜の開花はいつですか。","exampleTranslation":"벚꽃 개화는 언제입니까?"}]'></textarea>
+            </div>
+            <button type="button" class="btn btn--add" id="applyAutoGenerateBtn">문제 자동 생성 (기존 목록 전체 대체)</button>
+          </details>
+
           <fieldset class="form__fieldset">
             <legend class="form__legend">① 단어 시험</legend>
 
