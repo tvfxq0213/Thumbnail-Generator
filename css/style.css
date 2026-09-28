@@ -2,6 +2,13 @@
    NHK Easy News Thumbnail Generator — BEM Styles
    ========================================================================== */
 
+@font-face {
+  font-family: 'GMarketSans';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-weight: 500;
+  font-display: swap;
+}
+
 /* --- CSS Variables --- */
 :root {
   --color-bg: #f7f6f3;
@@ -15,7 +22,7 @@
   --color-btn-text: #ffffff;
 
   --font-ko: "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-jp: "Noto Sans JP", sans-serif;
+  --font-jp: "LINE Seed JP", sans-serif;
 
   --radius-sm: 6px;
   --radius-md: 12px;
@@ -542,6 +549,7 @@ body {
 
 /* --- Thumbnail (1200×1200 internal, scaled for display) --- */
 .thumbnail {
+  --font-ko: 'GMarketSans', "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
   width: 1200px;
   height: 1200px;
   background: #f7f6f3;

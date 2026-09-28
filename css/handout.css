@@ -128,6 +128,7 @@
   max-width: 477px;
   aspect-ratio: 210 / 297;
   position: relative;
+  container-type: inline-size;
 }
 
 /* --- A4 Page (794×1123px ≈ 210×297mm @ 96dpi) --- */
@@ -139,10 +140,10 @@
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translateX(-50%) scale(0.6);
+  transform: translateX(-50%) scale(calc(100cqw / 794px));
   transform-origin: top center;
   font-family: var(--font-ko);
-  padding: 64px 30px;
+  padding: 40px 30px 64px;
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
@@ -219,26 +220,42 @@
   flex-shrink: 0;
 }
 
-/* --- Vocabulary word --- */
+/* --- Vocabulary word (왼쪽: 단어·후리가나·뜻 / 오른쪽: 예문·해석, 한 줄에 하나씩) --- */
 #previewWords {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 14px;
-  row-gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .a4-word-block {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed #e5e5e5;
+}
+
+.a4-word-block:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.a4-word-left {
+  flex: 0 0 34%;
   min-width: 0;
-  padding: 3px 6px;
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
+}
+
+.a4-word-right {
+  flex: 1;
+  min-width: 0;
+  padding-top: 3px;
 }
 
 .a4-word {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
-  margin-bottom: 1px;
+  flex-wrap: wrap;
 }
 
 .a4-word__num {
@@ -248,12 +265,7 @@
   flex-shrink: 0;
 }
 
-.a4-word__text {
-  min-width: 0;
-}
-
 .a4-word__kanji {
-  display: block;
   font-family: var(--font-jp);
   font-size: 19px;
   font-weight: 700;
@@ -261,44 +273,36 @@
   color: #1a1a1a;
 }
 
-/* --- Memorization check boxes --- */
-.a4-check-row {
-  display: flex;
-  gap: 4px;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.a4-check-box {
-  width: 13px;
-  height: 13px;
-  border: 1.5px solid #cccccc;
-  border-radius: 3px;
-  flex-shrink: 0;
+.a4-word__furigana {
+  font-family: var(--font-jp);
+  font-size: 11px;
+  color: #999999;
 }
 
 .a4-word__meaning {
   display: block;
   font-size: 12px;
   line-height: 1.2;
-  margin-top:4px;
+  margin-top: 2px;
   color: #666666;
 }
 
 .a4-example-line {
-  font-size: 11px;
-  color: #444444;
-  line-height: 1.3;
   margin-top: 2px;
 }
 
 .a4-example-line--jp {
   font-family: var(--font-jp);
-  display: block;
+  font-size: 11px;
+  color: #444444;
+  line-height: 1.3;
 }
 
 .a4-example-line__tr {
+  font-size: 11px;
   color: #999999;
+  line-height: 1.3;
+  margin-top: 1px;
 }
 
 /* --- Grammar pattern --- */
@@ -408,9 +412,5 @@
 @media (max-width: 900px) {
   .a4-scale {
     max-width: 100%;
-  }
-
-  .a4-page {
-    transform: translateX(-50%) scale(calc((100vw - 4rem) / 794));
   }
 }

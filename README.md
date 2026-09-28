@@ -131,7 +131,8 @@ Thumbnail-Generator/
 | [html2canvas](https://html2canvas.hertzen.com/) v1.4.1 | 썸네일 이미지 변환 | jsDelivr CDN |
 | [html2pdf.js](https://github.com/eKoopmans/html2pdf.js) v0.10.1 | 핸드아웃 A4 PDF 변환 | jsDelivr CDN |
 | [Pretendard](https://github.com/orioncactus/pretendard) | 한국어 폰트 | jsDelivr CDN |
-| [Noto Sans JP](https://fonts.google.com/noto/specimen/Noto+Sans+JP) | 일본어 폰트 | Google Fonts |
+| [GMarketSans](https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff) | 썸네일 미리보기 한글 폰트 (`index.html` 한정) | jsDelivr CDN |
+| [LINE Seed JP](https://fonts.google.com/specimen/LINE+Seed+JP) | 일본어 폰트 | Google Fonts |
 
 ## 추가 예정 기능
 

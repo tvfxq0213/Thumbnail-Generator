@@ -676,8 +676,8 @@ function createCaptureNode(source) {
 async function ensureFontsReady() {
   const samples = [
     `700 ${getKoreanFontSize(dom.koreanTitle.value)}px Pretendard`,
-    `500 ${getJapaneseFontSize(dom.japaneseTitle.value)}px "Noto Sans JP"`,
-    '500 32px "Noto Sans JP"',
+    `500 ${getJapaneseFontSize(dom.japaneseTitle.value)}px "LINE Seed JP"`,
+    '500 32px "LINE Seed JP"',
     "500 30px Pretendard",
     `800 ${calculateFontSize(dom.travelTitle.value, TRAVEL_TITLE_FONT_RULES)}px Pretendard`,
     `800 ${calculateFontSize(dom.bookTitle.value, BOOK_TITLE_FONT_RULES)}px Pretendard`,

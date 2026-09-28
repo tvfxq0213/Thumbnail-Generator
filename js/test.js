@@ -576,8 +576,8 @@ function delay(ms) {
 /** 캡처 전 웹폰트가 로드될 때까지 대기한다 */
 async function ensureFontsReady() {
   const samples = [
-    '500 19px "Noto Sans JP"',
-    '700 30px "Noto Sans JP"',
+    '500 19px "LINE Seed JP"',
+    '700 30px "LINE Seed JP"',
     "500 17px Pretendard",
     "800 26px Pretendard",
   ];

@@ -45,7 +45,6 @@ const dom = {
 };
 
 const CIRCLED_NUMBERS = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳";
-const MEMORIZE_CHECK_COUNT = 3;
 const MAX_DIFFICULTY = 5;
 const CULTURE_NOTE_ALLOWED_TAGS = /&lt;(\/?)(b|strong|br)\s*\/?&gt;/gi;
 
@@ -53,7 +52,7 @@ const CULTURE_NOTE_ALLOWED_TAGS = /&lt;(\/?)(b|strong|br)\s*\/?&gt;/gi;
    State
    ========================================================================== */
 
-const words = [{ kanji: "", meaning: "", example: "", exampleTranslation: "" }];
+const words = [{ kanji: "", furigana: "", meaning: "", example: "", exampleTranslation: "" }];
 const grammars = [{ pattern: "", example: "", exampleTranslation: "" }];
 let difficulty = 0;
 
@@ -184,6 +183,7 @@ function normalizeWordItem(raw) {
   }
 
   const kanji = String(raw.kanji ?? raw.word ?? raw.단어 ?? "").trim();
+  const furigana = String(raw.furigana ?? raw.후리가나 ?? raw.reading ?? raw.요미가나 ?? "").trim();
   const meaning = String(raw.meaning ?? raw.뜻 ?? "").trim();
   const example = String(raw.example ?? raw.예문 ?? "").trim();
   const exampleTranslation = String(
@@ -194,7 +194,7 @@ function normalizeWordItem(raw) {
     return null;
   }
 
-  return { kanji, meaning, example, exampleTranslation };
+  return { kanji, furigana, meaning, example, exampleTranslation };
 }
 
 /** JSON 붙여넣기 입력을 파싱해 단어 목록 전체를 교체한다 */
@@ -250,6 +250,20 @@ function renderWordEntries() {
         extraClass: "form__input--jp",
         onInput: (value) => {
           word.kanji = value;
+          updatePreview();
+        },
+      })
+    );
+
+    entry.appendChild(
+      createFieldGroup({
+        labelText: "후리가나 (선택)",
+        value: word.furigana,
+        placeholder: "例: かいか",
+        maxlength: 30,
+        extraClass: "form__input--jp",
+        onInput: (value) => {
+          word.furigana = value;
           updatePreview();
         },
       })
@@ -407,53 +421,45 @@ function renderGrammarEntries() {
    Preview Module
    ========================================================================== */
 
-/** 암기 확인용 체크 박스 3칸을 생성한다 */
-function createCheckRow() {
-  const row = document.createElement("div");
-  row.className = "a4-check-row";
-
-  for (let i = 0; i < MEMORIZE_CHECK_COUNT; i += 1) {
-    const box = document.createElement("span");
-    box.className = "a4-check-box";
-    row.appendChild(box);
-  }
-
-  return row;
-}
-
-/** 예문 + 해석을 한 줄로 합쳐 렌더링한다 (단어/문법 공용) */
+/**
+ * 예문과 해석을 각각 별도의 블록 줄로 렌더링한다 (단어/문법 공용).
+ * 두 줄 모두 같은 컨테이너의 블록 자식이라 왼쪽 여백이 항상 예문 시작 위치와 일치한다.
+ */
 function createExampleLine(example, translation) {
   if (!example && !translation) {
     return null;
   }
 
-  const p = document.createElement("p");
-  p.className = "a4-example-line";
+  const wrapper = document.createElement("div");
+  wrapper.className = "a4-example-line";
 
   if (example) {
-    const jp = document.createElement("span");
+    const jp = document.createElement("p");
     jp.className = "a4-example-line--jp";
     jp.textContent = example;
-    p.appendChild(jp);
+    wrapper.appendChild(jp);
   }
 
   if (translation) {
-    const tr = document.createElement("span");
+    const tr = document.createElement("p");
     tr.className = "a4-example-line__tr";
-    tr.textContent = ` — ${translation}`;
-    p.appendChild(tr);
+    tr.textContent = `— ${translation}`;
+    wrapper.appendChild(tr);
   }
 
-  return p;
+  return wrapper;
 }
 
-/** 핵심 단어 미리보기를 렌더링한다 */
+/** 핵심 단어 미리보기를 렌더링한다 (왼쪽: 단어·후리가나·뜻 / 오른쪽: 예문·해석) */
 function renderPreviewWords() {
   dom.previewWords.innerHTML = "";
 
   words.forEach((word, index) => {
     const block = document.createElement("div");
     block.className = "a4-word-block";
+
+    const left = document.createElement("div");
+    left.className = "a4-word-left";
 
     const wordRow = document.createElement("div");
     wordRow.className = "a4-word";
@@ -463,29 +469,37 @@ function renderPreviewWords() {
     num.textContent = circledNumber(index + 1);
     wordRow.appendChild(num);
 
-    const text = document.createElement("div");
-    text.className = "a4-word__text";
-
     const kanji = document.createElement("span");
     kanji.className = "a4-word__kanji";
     kanji.textContent = word.kanji.trim() || (index === 0 ? "開花" : "");
-    text.appendChild(kanji);
+    wordRow.appendChild(kanji);
+
+    const furigana = word.furigana.trim();
+    if (furigana) {
+      const furiganaEl = document.createElement("span");
+      furiganaEl.className = "a4-word__furigana";
+      furiganaEl.textContent = `(${furigana})`;
+      wordRow.appendChild(furiganaEl);
+    }
+
+    left.appendChild(wordRow);
 
     const meaning = document.createElement("span");
     meaning.className = "a4-word__meaning";
     meaning.textContent = word.meaning.trim();
-    text.appendChild(meaning);
+    left.appendChild(meaning);
 
-    wordRow.appendChild(text);
+    block.appendChild(left);
 
-    wordRow.appendChild(createCheckRow());
-
-    block.appendChild(wordRow);
+    const right = document.createElement("div");
+    right.className = "a4-word-right";
 
     const exampleLine = createExampleLine(word.example.trim(), word.exampleTranslation.trim());
     if (exampleLine) {
-      block.appendChild(exampleLine);
+      right.appendChild(exampleLine);
     }
+
+    block.appendChild(right);
 
     dom.previewWords.appendChild(block);
   });
@@ -592,8 +606,8 @@ function delay(ms) {
 /** 캡처 전 웹폰트가 로드될 때까지 대기한다 */
 async function ensureFontsReady() {
   const samples = [
-    '500 19px "Noto Sans JP"',
-    '700 30px "Noto Sans JP"',
+    '500 19px "LINE Seed JP"',
+    '700 30px "LINE Seed JP"',
     "500 17px Pretendard",
     "800 26px Pretendard",
   ];
@@ -715,7 +729,7 @@ function bindEvents() {
   );
 
   dom.addWordBtn.addEventListener("click", () => {
-    words.push({ kanji: "", meaning: "", example: "", exampleTranslation: "" });
+    words.push({ kanji: "", furigana: "", meaning: "", example: "", exampleTranslation: "" });
     renderWordEntries();
     updatePreview();
   });
