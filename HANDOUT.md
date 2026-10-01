@@ -89,5 +89,6 @@ start handout.html
 | 라이브러리 | 용도 | 로드 방식 |
 |-----------|------|----------|
 | [html2pdf.js](https://github.com/eKoopmans/html2pdf.js) v0.10.1 | A4 PDF 변환 | jsDelivr CDN |
-| [Pretendard](https://github.com/orioncactus/pretendard) | 한국어 폰트 | jsDelivr CDN |
-| [LINE Seed JP](https://fonts.google.com/specimen/LINE+Seed+JP) | 일본어 폰트 | Google Fonts |
+| [GMarketSans](https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff) | 한국어 폰트 (썸네일 생성기와 동일, 미지원 글자는 Pretendard로 대체) | jsDelivr CDN |
+| [Pretendard](https://github.com/orioncactus/pretendard) | 한국어 폰트 (GMarketSans 폴백) | jsDelivr CDN |
+| [LINE Seed JP](https://fonts.google.com/specimen/LINE+Seed+JP) | 일본어 폰트 (썸네일 생성기와 동일) | Google Fonts |

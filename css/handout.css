@@ -133,6 +133,7 @@
 
 /* --- A4 Page (794×1123px ≈ 210×297mm @ 96dpi) --- */
 .a4-page {
+  --font-ko: 'GMarketSans', "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
   width: 794px;
   height: 1123px;
   background: #ffffff;
@@ -338,10 +339,6 @@
   min-height: 18px;
 }
 
-.a4-field__value--jp {
-  font-family: var(--font-jp);
-}
-
 .a4-field__value--standalone {
   margin-bottom: 8px;
   font-size: 14px;
@@ -377,6 +374,7 @@
 }
 
 .a4-review__text {
+  font-family: var(--font-jp);
   font-size: 14px;
   color: #333333;
   min-height: 20px;
