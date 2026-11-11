@@ -50,7 +50,7 @@
           </div>
 
           <fieldset class="form__fieldset">
-            <legend class="form__legend">① 오늘의 노래</legend>
+            <legend class="form__legend">오늘의 노래</legend>
 
             <div class="form__group">
               <label class="form__label" for="songTitle">곡명</label>
@@ -79,7 +79,7 @@
           </fieldset>
 
           <fieldset class="form__fieldset">
-            <legend class="form__legend">② 가사에서 고른 핵심 표현</legend>
+            <legend class="form__legend">가사에서 고른 핵심 표현</legend>
 
             <details class="json-import">
               <summary class="json-import__summary">JSON으로 일괄 입력</summary>
@@ -93,7 +93,7 @@
           </fieldset>
 
           <fieldset class="form__fieldset">
-            <legend class="form__legend">③ 핵심 단어</legend>
+            <legend class="form__legend">핵심 단어</legend>
 
             <details class="json-import">
               <summary class="json-import__summary">JSON으로 일괄 입력</summary>
@@ -107,7 +107,7 @@
           </fieldset>
 
           <fieldset class="form__fieldset">
-            <legend class="form__legend">④ 핵심 문법과 문형</legend>
+            <legend class="form__legend">핵심 문법과 문형</legend>
 
             <details class="json-import">
               <summary class="json-import__summary">JSON으로 일괄 입력</summary>
@@ -121,29 +121,29 @@
           </fieldset>
 
           <fieldset class="form__fieldset">
-            <legend class="form__legend">⑤ 가사 속 은유와 표현</legend>
+            <legend class="form__legend">가사 속 은유와 표현</legend>
             <textarea class="form__input form__textarea" id="metaphorNote" rows="4" placeholder="예: ‘바람에 닿지 않는 듯한 마음’은 실제로 답을 찾지 못하는 상실감이라는 뉘앙스를 전달합니다.">‘～のように’로 이어지는 심리적 표현은 현실 속 감정을 비유로 드러내며, 직접적인 표현보다 더 섬세한 감정을 전달합니다.</textarea>
           </fieldset>
 
           <fieldset class="form__fieldset">
-            <legend class="form__legend">⑥ 실제 회화에서는 이렇게</legend>
+            <legend class="form__legend">실제 회화에서는 이렇게</legend>
             <textarea class="form__input form__textarea" id="conversationNote" rows="4" placeholder="예: 가사 속 표현을 일상 대화로 바꾸면 …">가사 속 감정 표현은 대화에서도 쓰지만, 일상에서는 조금 더 부드럽게 “少し寂しい気持ちがする”처럼 말하는 편이 자연스럽습니다.</textarea>
           </fieldset>
 
           <fieldset class="form__fieldset">
-            <legend class="form__legend">⑦ 따라 읽기</legend>
+            <legend class="form__legend">따라 읽기</legend>
             <textarea class="form__input form__textarea" id="readingNote" rows="4" placeholder="예: 1절 후반부를 느리게, 2절 앞부분은 호흡을 길게 잡아 읽기">1절은 감정을 천천히 살리며 읽고, 2절은 후렴부를 크게 끊어 읽으며 억양을 살리는 것이 좋습니다.</textarea>
           </fieldset>
 
           <fieldset class="form__fieldset">
-            <legend class="form__legend">⑧ 복습 퀴즈</legend>
+            <legend class="form__legend">복습 퀴즈</legend>
             <textarea class="form__input form__textarea" id="quizNote" rows="4" placeholder="예: 빈칸 채우기: ___ かな? / 의미 고르기: 후회 / 분노 / 설렘">- 빈칸 채우기: 「___」에 들어갈 표현 찾기
 - 의미 고르기: “寂しい”의 뉘앙스는 무엇인가?
 - 문장 만들기: 오늘 배운 문형을 사용해 2문장 만들기</textarea>
           </fieldset>
 
           <fieldset class="form__fieldset">
-            <legend class="form__legend">⑨ 오늘의 학습 정리</legend>
+            <legend class="form__legend">오늘의 학습 정리</legend>
 
             <div class="form__group">
               <label class="form__label" for="summaryWords">기억할 단어 3개</label>
@@ -192,7 +192,7 @@
             </header>
 
             <section class="a4-section song-section">
-              <h3 class="a4-section__title">① 오늘의 노래</h3>
+              <h3 class="a4-section__title">오늘의 노래</h3>
               <div class="song-meta-grid">
                 <div class="song-meta-item"><span class="song-meta-label">곡명</span><strong id="previewSongTitle">Lemon</strong></div>
                 <div class="song-meta-item"><span class="song-meta-label">가수</span><strong id="previewSongArtist">米津玄師</strong></div>
@@ -211,14 +211,14 @@
             <hr class="a4-divider">
 
             <section class="a4-section song-section">
-              <h3 class="a4-section__title">② 가사에서 고른 핵심 표현</h3>
+              <h3 class="a4-section__title">가사에서 고른 핵심 표현</h3>
               <div id="previewExpressions" class="song-card-list"></div>
             </section>
 
             <hr class="a4-divider">
 
             <section class="a4-section song-section">
-              <h3 class="a4-section__title">③ 핵심 단어</h3>
+              <h3 class="a4-section__title">핵심 단어</h3>
               <div id="previewVocab" class="song-card-list"></div>
             </section>
           </article>
@@ -232,42 +232,42 @@
             </header>
 
             <section class="a4-section song-section">
-              <h3 class="a4-section__title">④ 핵심 문법과 문형</h3>
+              <h3 class="a4-section__title">핵심 문법과 문형</h3>
               <div id="previewGrammar" class="song-card-list"></div>
             </section>
 
             <hr class="a4-divider">
 
             <section class="a4-section song-section">
-              <h3 class="a4-section__title">⑤ 가사 속 은유와 표현</h3>
+              <h3 class="a4-section__title">가사 속 은유와 표현</h3>
               <div id="previewMetaphor" class="song-rich-text"></div>
             </section>
 
             <hr class="a4-divider">
 
             <section class="a4-section song-section">
-              <h3 class="a4-section__title">⑥ 실제 회화에서는 이렇게</h3>
+              <h3 class="a4-section__title">실제 회화에서는 이렇게</h3>
               <div id="previewConversation" class="song-rich-text"></div>
             </section>
 
             <hr class="a4-divider">
 
             <section class="a4-section song-section">
-              <h3 class="a4-section__title">⑦ 따라 읽기</h3>
+              <h3 class="a4-section__title">따라 읽기</h3>
               <div id="previewReading" class="song-rich-text"></div>
             </section>
 
             <hr class="a4-divider">
 
             <section class="a4-section song-section">
-              <h3 class="a4-section__title">⑧ 복습 퀴즈</h3>
+              <h3 class="a4-section__title">복습 퀴즈</h3>
               <div id="previewQuiz" class="song-rich-text"></div>
             </section>
 
             <hr class="a4-divider">
 
             <section class="a4-section song-section">
-              <h3 class="a4-section__title">⑨ 오늘의 학습 정리</h3>
+              <h3 class="a4-section__title">오늘의 학습 정리</h3>
               <div class="song-summary-grid">
                 <div><span class="song-summary-label">기억할 단어</span><p id="previewSummaryWords"></p></div>
                 <div><span class="song-summary-label">기억할 문형</span><p id="previewSummaryGrammar"></p></div>
