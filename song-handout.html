@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>노래가사로 배우는 일본어 핸드아웃</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/handout.css">
+  <link rel="stylesheet" href="css/song-handout.css">
+</head>
+<body class="app app--light app--theme-green">
+  <div class="app__overlay" id="loadingOverlay" hidden aria-hidden="true">
+    <div class="app__spinner" role="status" aria-label="PDF 생성 중"></div>
+    <p class="app__loading-text">PDF 생성 중…</p>
+  </div>
+
+  <header class="app__header">
+    <div class="app__header-inner">
+      <h1 class="app__title">노래가사로 배우는 일본어</h1>
+      <div class="app__header-actions">
+        <a class="btn btn--secondary" href="handout.html">뉴스 핸드아웃 →</a>
+        <a class="btn btn--secondary" href="index.html">썸네일 생성기 →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="app__main">
+    <section class="panel panel--form" aria-labelledby="formTitle">
+      <div class="card">
+        <h2 class="card__title" id="formTitle">음악형 핸드아웃 정보 입력</h2>
+
+        <form class="form" id="songForm" novalidate>
+          <div class="form__group">
+            <label class="form__label" for="brandText">상단 브랜드명</label>
+            <input class="form__input" type="text" id="brandText" value="노래가사로 배우는 일본어" maxlength="40">
+          </div>
+
+          <div class="form__group">
+            <label class="form__label" for="episodeNumber">회차 번호 (선택)</label>
+            <input class="form__input" type="number" id="episodeNumber" placeholder="예: 1" min="0" max="999">
+          </div>
+
+          <div class="form__group">
+            <label class="form__label">오늘의 난이도</label>
+            <div class="star-rating" id="difficultyStars" role="radiogroup" aria-label="오늘의 난이도"></div>
+          </div>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">① 오늘의 노래</legend>
+
+            <div class="form__group">
+              <label class="form__label" for="songTitle">곡명</label>
+              <input class="form__input form__input--jp" type="text" id="songTitle" value="Lemon" maxlength="60">
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="songArtist">가수</label>
+              <input class="form__input" type="text" id="songArtist" value="米津玄師" maxlength="60">
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="songRelease">발매 정보</label>
+              <input class="form__input" type="text" id="songRelease" value="2018 / 〈Lemon〉" maxlength="80">
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="songTheme">노래의 전체적인 주제와 분위기</label>
+              <textarea class="form__input form__textarea" id="songTheme" rows="3" placeholder="예: 이별의 아픔과 후회감을 담은 서정적이고 감성적인 분위기">이별 후 남겨진 감정과 후회를 담은 서정적이고 감성적인 분위기입니다.</textarea>
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="songDifficultyText">학습 난이도 및 추천 학습 포인트</label>
+              <textarea class="form__input form__textarea" id="songDifficultyText" rows="3" placeholder="예: 중급 이상 / 감정 표현과 연결 어미를 중심으로 학습하면 좋아요.">중급 이상. 감정 표현, 연결어미, 일상적이지만 깊은 감정 표현을 중심으로 익히면 효과적입니다.</textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">② 가사에서 고른 핵심 표현</legend>
+
+            <div class="repeat-list" id="expressionEntries"></div>
+            <button type="button" class="btn btn--add" id="addExpressionBtn">+ 표현 추가</button>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">③ 핵심 단어</legend>
+
+            <div class="repeat-list" id="vocabEntries"></div>
+            <button type="button" class="btn btn--add" id="addVocabBtn">+ 단어 추가</button>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">④ 핵심 문법과 문형</legend>
+
+            <div class="repeat-list" id="grammarEntries"></div>
+            <button type="button" class="btn btn--add" id="addGrammarBtn">+ 문법 추가</button>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">⑤ 가사 속 은유와 표현</legend>
+            <textarea class="form__input form__textarea" id="metaphorNote" rows="4" placeholder="예: ‘바람에 닿지 않는 듯한 마음’은 실제로 답을 찾지 못하는 상실감이라는 뉘앙스를 전달합니다.">‘～のように’로 이어지는 심리적 표현은 현실 속 감정을 비유로 드러내며, 직접적인 표현보다 더 섬세한 감정을 전달합니다.</textarea>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">⑥ 실제 회화에서는 이렇게</legend>
+            <textarea class="form__input form__textarea" id="conversationNote" rows="4" placeholder="예: 가사 속 표현을 일상 대화로 바꾸면 …">가사 속 감정 표현은 대화에서도 쓰지만, 일상에서는 조금 더 부드럽게 “少し寂しい気持ちがする”처럼 말하는 편이 자연스럽습니다.</textarea>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">⑦ 따라 읽기</legend>
+            <textarea class="form__input form__textarea" id="readingNote" rows="4" placeholder="예: 1절 후반부를 느리게, 2절 앞부분은 호흡을 길게 잡아 읽기">1절은 감정을 천천히 살리며 읽고, 2절은 후렴부를 크게 끊어 읽으며 억양을 살리는 것이 좋습니다.</textarea>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">⑧ 복습 퀴즈</legend>
+            <textarea class="form__input form__textarea" id="quizNote" rows="4" placeholder="예: 빈칸 채우기: ___ かな? / 의미 고르기: 후회 / 분노 / 설렘">- 빈칸 채우기: 「___」에 들어갈 표현 찾기
+- 의미 고르기: “寂しい”의 뉘앙스는 무엇인가?
+- 문장 만들기: 오늘 배운 문형을 사용해 2문장 만들기</textarea>
+          </fieldset>
+
+          <fieldset class="form__fieldset">
+            <legend class="form__legend">⑨ 오늘의 학습 정리</legend>
+
+            <div class="form__group">
+              <label class="form__label" for="summaryWords">기억할 단어 3개</label>
+              <input class="form__input" type="text" id="summaryWords" value="寂しい / 伝えたい / どうしても" maxlength="120">
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="summaryGrammar">기억할 문형 1개</label>
+              <input class="form__input form__input--jp" type="text" id="summaryGrammar" value="～ように" maxlength="60">
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="summarySentence">오늘의 한 문장</label>
+              <input class="form__input form__input--jp" type="text" id="summarySentence" value="言葉にできない気持ちも、歌で伝わることがある。" maxlength="120">
+            </div>
+          </fieldset>
+
+          <div class="form__group">
+            <label class="form__label" for="qrImage">블로그 QR 코드 이미지</label>
+            <input class="form__input" type="file" id="qrImage" accept="image/*">
+          </div>
+
+          <div class="form__actions">
+            <button type="button" class="btn btn--primary" id="savePdfBtn">
+              <span class="btn__label">PDF 다운로드</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="panel panel--preview" aria-labelledby="previewTitle">
+      <h2 class="panel__title" id="previewTitle">미리보기 (2페이지 A4)</h2>
+      <div class="preview preview--song-a4">
+        <div class="song-pages" id="songPreviewRoot">
+          <article class="a4-page song-page" id="songPageOne" aria-label="노래 핸드아웃 1페이지">
+            <header class="a4-page__header">
+              <div class="a4-page__header-top">
+                <span class="a4-page__brand" id="previewBrand">노래가사로 배우는 일본어</span>
+                <span class="a4-page__episode" id="previewEpisode"></span>
+              </div>
+              <div class="a4-page__difficulty" id="previewDifficulty" hidden>
+                <span class="a4-page__difficulty-label">오늘의 난이도</span>
+                <span class="a4-page__difficulty-stars" id="previewDifficultyStars"></span>
+              </div>
+            </header>
+
+            <section class="a4-section song-section">
+              <h3 class="a4-section__title">① 오늘의 노래</h3>
+              <div class="song-meta-grid">
+                <div class="song-meta-item"><span class="song-meta-label">곡명</span><strong id="previewSongTitle">Lemon</strong></div>
+                <div class="song-meta-item"><span class="song-meta-label">가수</span><strong id="previewSongArtist">米津玄師</strong></div>
+                <div class="song-meta-item"><span class="song-meta-label">발매 정보</span><strong id="previewSongRelease">2018 / 〈Lemon〉</strong></div>
+              </div>
+              <div class="song-note-box">
+                <h4>주제와 분위기</h4>
+                <p id="previewSongTheme"></p>
+              </div>
+              <div class="song-note-box">
+                <h4>학습 포인트</h4>
+                <p id="previewSongDifficultyText"></p>
+              </div>
+            </section>
+
+            <hr class="a4-divider">
+
+            <section class="a4-section song-section">
+              <h3 class="a4-section__title">② 가사에서 고른 핵심 표현</h3>
+              <div id="previewExpressions" class="song-card-list"></div>
+            </section>
+
+            <hr class="a4-divider">
+
+            <section class="a4-section song-section">
+              <h3 class="a4-section__title">③ 핵심 단어</h3>
+              <div id="previewVocab" class="song-card-list"></div>
+            </section>
+          </article>
+
+          <article class="a4-page song-page" id="songPageTwo" aria-label="노래 핸드아웃 2페이지">
+            <header class="a4-page__header">
+              <div class="a4-page__header-top">
+                <span class="a4-page__brand" id="previewBrandSecond">노래가사로 배우는 일본어</span>
+                <span class="a4-page__episode" id="previewEpisodeSecond"></span>
+              </div>
+            </header>
+
+            <section class="a4-section song-section">
+              <h3 class="a4-section__title">④ 핵심 문법과 문형</h3>
+              <div id="previewGrammar" class="song-card-list"></div>
+            </section>
+
+            <hr class="a4-divider">
+
+            <section class="a4-section song-section">
+              <h3 class="a4-section__title">⑤ 가사 속 은유와 표현</h3>
+              <div id="previewMetaphor" class="song-rich-text"></div>
+            </section>
+
+            <hr class="a4-divider">
+
+            <section class="a4-section song-section">
+              <h3 class="a4-section__title">⑥ 실제 회화에서는 이렇게</h3>
+              <div id="previewConversation" class="song-rich-text"></div>
+            </section>
+
+            <hr class="a4-divider">
+
+            <section class="a4-section song-section">
+              <h3 class="a4-section__title">⑦ 따라 읽기</h3>
+              <div id="previewReading" class="song-rich-text"></div>
+            </section>
+
+            <hr class="a4-divider">
+
+            <section class="a4-section song-section">
+              <h3 class="a4-section__title">⑧ 복습 퀴즈</h3>
+              <div id="previewQuiz" class="song-rich-text"></div>
+            </section>
+
+            <hr class="a4-divider">
+
+            <section class="a4-section song-section">
+              <h3 class="a4-section__title">⑨ 오늘의 학습 정리</h3>
+              <div class="song-summary-grid">
+                <div><span class="song-summary-label">기억할 단어</span><p id="previewSummaryWords"></p></div>
+                <div><span class="song-summary-label">기억할 문형</span><p id="previewSummaryGrammar"></p></div>
+                <div><span class="song-summary-label">오늘의 한 문장</span><p id="previewSummarySentence"></p></div>
+              </div>
+            </section>
+
+            <img class="a4-qr" id="previewQr" alt="블로그 QR 코드" hidden>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <script src="js/song-handout.js" type="module"></script>
+</body>
+</html>

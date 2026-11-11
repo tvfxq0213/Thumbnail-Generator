@@ -1,0 +1,142 @@
+/* ==========================================================================
+   Lyrics Handout styles
+   ========================================================================== */
+
+.song-section {
+  flex-shrink: 0;
+}
+
+.song-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.song-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 9px 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #f8faf8;
+}
+
+.song-meta-label,
+.song-summary-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.04em;
+}
+
+.song-note-box {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #dbe9dc;
+  background: #f6faf7;
+}
+
+.song-note-box h4 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: #1d3f2b;
+}
+
+.song-note-box p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #2b2b2b;
+}
+
+.song-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.song-card {
+  padding: 10px 12px;
+  border: 1px solid #dfeae1;
+  border-radius: 12px;
+  background: #f8fbf9;
+}
+
+.song-card__title {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.song-card__num {
+  color: var(--color-accent);
+  font-size: 11px;
+}
+
+.song-card__phrase {
+  font-size: 18px;
+  font-family: var(--font-jp, "LINE Seed JP", serif);
+  color: #1b1b1b;
+}
+
+.song-card__furigana {
+  font-size: 11px;
+  color: #7a7a7a;
+}
+
+.song-card__body {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.song-card__body strong {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.song-card__body p {
+  margin: 0;
+}
+
+.song-rich-text {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.song-rich-text p {
+  margin: 0;
+}
+
+.song-summary-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.song-summary-grid > div {
+  padding: 10px 12px;
+  border: 1px solid #dfeae1;
+  border-radius: 10px;
+  background: #f8fbf9;
+}
+
+.song-summary-grid p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .song-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}

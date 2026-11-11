@@ -125,30 +125,33 @@
 
 .a4-scale {
   width: 100%;
-  max-width: 477px;
-  aspect-ratio: 210 / 297;
+  max-width: 794px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   position: relative;
   container-type: inline-size;
 }
 
-/* --- A4 Page (794×1123px ≈ 210×297mm @ 96dpi) --- */
+/* --- A4 Page (210×297mm, responsive) --- */
 .a4-page {
   --font-ko: 'GMarketSans', "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
-  width: 794px;
-  height: 1123px;
+  width: min(100%, 794px);
+  aspect-ratio: 210 / 297;
+  min-height: 0;
   background: #ffffff;
   color: #222222;
-  position: absolute;
+  position: relative;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%) scale(calc(100cqw / 794px));
-  transform-origin: top center;
+  left: 0;
+  transform: none;
   font-family: var(--font-ko);
   padding: 40px 30px 64px;
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
 }
 
 .a4-page__header {
