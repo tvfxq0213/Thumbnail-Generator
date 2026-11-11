@@ -54,6 +54,14 @@
             </div>
 
             <fieldset class="form__fieldset">
+              <legend class="form__legend">미리보기 문구</legend>
+              <div class="category-picker" id="seriesPicker" role="radiogroup" aria-label="미리보기 문구 선택">
+                <button type="button" class="category-picker__btn is-active" data-series="일본어 뉴스" aria-pressed="true">일본어 뉴스</button>
+                <button type="button" class="category-picker__btn" data-series="일본어 노래가사" aria-pressed="false">일본어 노래가사</button>
+              </div>
+            </fieldset>
+
+            <fieldset class="form__fieldset">
               <legend class="form__legend">카테고리</legend>
               <div class="category-picker" id="categoryPicker" role="radiogroup" aria-label="카테고리 선택">
                 <button type="button" class="category-picker__btn" data-category="JLPT N5" aria-pressed="false">JLPT N5</button>
@@ -66,6 +74,7 @@
                 <button type="button" class="category-picker__btn" data-category="경제" aria-pressed="false">경제</button>
                 <button type="button" class="category-picker__btn" data-category="사회" aria-pressed="false">사회</button>
                 <button type="button" class="category-picker__btn" data-category="문화" aria-pressed="false">문화</button>
+                <button type="button" class="category-picker__btn" data-category="노래" aria-pressed="false">노래</button>
               </div>
             </fieldset>
 
@@ -249,7 +258,7 @@
               <header class="thumbnail__header">
                 <div class="thumbnail__brand">
                   <span class="thumbnail__logo" aria-hidden="true"></span>
-                  <span class="thumbnail__series">일본어 뉴스</span>
+                  <span class="thumbnail__series" id="previewSeries">일본어 뉴스</span>
                 </div>
               </header>
 

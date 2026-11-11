@@ -9,6 +9,7 @@
 
 const STORAGE_KEYS = {
   category: "nhk_thumb_category",
+  series: "nhk_thumb_series",
   colorTheme: "nhk_thumb_color_theme",
   darkMode: "nhk_thumb_dark_mode",
   mode: "nhk_thumb_mode",
@@ -29,9 +30,13 @@ const CATEGORY_OPTIONS = [
   "경제",
   "사회",
   "문화",
+  "노래",
 ];
 
 const DEFAULT_CATEGORY = "JLPT N3";
+
+const SERIES_OPTIONS = ["일본어 뉴스", "일본어 노래가사"];
+const DEFAULT_SERIES = "일본어 뉴스";
 
 const COLOR_THEMES = ["green", "blue", "orange", "red", "purple", "gray"];
 
@@ -90,6 +95,8 @@ const dom = {
   app: document.body,
   koreanTitle: document.getElementById("koreanTitle"),
   japaneseTitle: document.getElementById("japaneseTitle"),
+  seriesPicker: document.getElementById("seriesPicker"),
+  previewSeries: document.getElementById("previewSeries"),
   categoryPicker: document.getElementById("categoryPicker"),
   previewCategory: document.getElementById("previewCategory"),
   previewEpisode: document.getElementById("previewEpisode"),
@@ -182,6 +189,7 @@ function restoreFormValues() {
     loadFromStorage(STORAGE_KEYS.category) ||
     loadFromStorage("nhk_thumb_jlpt") ||
     DEFAULT_CATEGORY;
+  const savedSeries = loadFromStorage(STORAGE_KEYS.series);
   const savedColorTheme = loadFromStorage(STORAGE_KEYS.colorTheme);
   const savedDarkMode = loadFromStorage(STORAGE_KEYS.darkMode);
   const savedMode = loadFromStorage(STORAGE_KEYS.mode);
@@ -191,6 +199,7 @@ function restoreFormValues() {
   const savedBookHandlePosition = loadFromStorage(STORAGE_KEYS.bookHandlePosition);
 
   setCategory(savedCategory, { persist: false });
+  setSeries(savedSeries, { persist: false });
   if (savedColorTheme && COLOR_THEMES.includes(savedColorTheme)) {
     setColorTheme(savedColorTheme);
   }
@@ -247,6 +256,26 @@ function setCategory(category, { persist = true } = {}) {
 
   if (persist) {
     saveToStorage(STORAGE_KEYS.category, value);
+  }
+}
+
+/**
+ * 미리보기 문구 선택 상태를 적용한다
+ * @param {string} series
+ * @param {{ persist?: boolean }} options
+ */
+function setSeries(series, { persist = true } = {}) {
+  const value = SERIES_OPTIONS.includes(series) ? series : DEFAULT_SERIES;
+
+  dom.seriesPicker.querySelectorAll(".category-picker__btn").forEach((btn) => {
+    const isActive = btn.dataset.series === value;
+    btn.classList.toggle("is-active", isActive);
+    btn.setAttribute("aria-pressed", String(isActive));
+  });
+  dom.previewSeries.textContent = value;
+
+  if (persist) {
+    saveToStorage(STORAGE_KEYS.series, value);
   }
 }
 
@@ -784,6 +813,12 @@ function delay(ms) {
 function bindInputEvents() {
   [dom.koreanTitle, dom.japaneseTitle, dom.episode].forEach((input) => {
     input.addEventListener("input", updatePreview);
+  });
+
+  dom.seriesPicker.addEventListener("click", (e) => {
+    const btn = e.target.closest(".category-picker__btn");
+    if (!btn) return;
+    setSeries(btn.dataset.series);
   });
 
   dom.categoryPicker.addEventListener("click", (e) => {
