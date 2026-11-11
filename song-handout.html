@@ -169,100 +169,102 @@
     <section class="panel panel--preview" aria-labelledby="previewTitle">
       <h2 class="panel__title" id="previewTitle">미리보기 (2페이지 A4)</h2>
       <div class="preview preview--song-a4">
-        <div class="song-pages" id="songPreviewRoot">
-          <article class="a4-page song-page" id="songPageOne" aria-label="노래 핸드아웃 1페이지">
-            <header class="a4-page__header">
-              <div class="a4-page__header-top">
-                <span class="a4-page__brand" id="previewBrand">노래가사로 배우는 일본어</span>
-                <span class="a4-page__episode" id="previewEpisode"></span>
-              </div>
-              <div class="a4-page__difficulty" id="previewDifficulty" hidden>
-                <span class="a4-page__difficulty-label">오늘의 난이도</span>
-                <span class="a4-page__difficulty-stars" id="previewDifficultyStars"></span>
-              </div>
-            </header>
+        <div class="a4-scale">
+          <div class="song-pages" id="songPreviewRoot">
+            <article class="a4-page song-page" id="songPageOne" aria-label="노래 핸드아웃 1페이지">
+              <header class="a4-page__header">
+                <div class="a4-page__header-top">
+                  <span class="a4-page__brand" id="previewBrand">노래가사로 배우는 일본어</span>
+                  <span class="a4-page__episode" id="previewEpisode"></span>
+                </div>
+                <div class="a4-page__difficulty" id="previewDifficulty" hidden>
+                  <span class="a4-page__difficulty-label">오늘의 난이도</span>
+                  <span class="a4-page__difficulty-stars" id="previewDifficultyStars"></span>
+                </div>
+              </header>
 
-            <section class="a4-section song-section">
-              <h3 class="a4-section__title">오늘의 노래</h3>
-              <div class="song-meta-grid">
-                <div class="song-meta-item"><span class="song-meta-label">곡명</span><strong id="previewSongTitle">Lemon</strong></div>
-                <div class="song-meta-item"><span class="song-meta-label">가수</span><strong id="previewSongArtist">米津玄師</strong></div>
-              </div>
-              <div class="song-note-box">
-                <h4>주제와 분위기</h4>
-                <p id="previewSongTheme"></p>
-              </div>
-            </section>
+              <section class="a4-section song-section">
+                <h3 class="a4-section__title">오늘의 노래</h3>
+                <div class="song-meta-grid">
+                  <div class="song-meta-item"><span class="song-meta-label">곡명</span><strong id="previewSongTitle">Lemon</strong></div>
+                  <div class="song-meta-item"><span class="song-meta-label">가수</span><strong id="previewSongArtist">米津玄師</strong></div>
+                </div>
+                <div class="song-note-box">
+                  <h4>주제와 분위기</h4>
+                  <p id="previewSongTheme"></p>
+                </div>
+              </section>
 
-            <hr class="a4-divider">
+              <hr class="a4-divider">
 
-            <section class="a4-section song-section">
-              <h3 class="a4-section__title">가사에서 고른 핵심 표현</h3>
-              <div id="previewExpressions" class="song-card-list"></div>
-            </section>
+              <section class="a4-section song-section">
+                <h3 class="a4-section__title">가사에서 고른 핵심 표현</h3>
+                <div id="previewExpressions" class="song-card-list"></div>
+              </section>
 
-            <hr class="a4-divider">
+              <hr class="a4-divider">
 
-            <section class="a4-section song-section">
-              <h3 class="a4-section__title">핵심 단어</h3>
-              <div id="previewVocab" class="song-card-list"></div>
-            </section>
-          </article>
+              <section class="a4-section song-section">
+                <h3 class="a4-section__title">핵심 단어</h3>
+                <div id="previewVocab" class="song-card-list"></div>
+              </section>
+            </article>
 
-          <article class="a4-page song-page" id="songPageTwo" aria-label="노래 핸드아웃 2페이지">
-            <header class="a4-page__header">
-              <div class="a4-page__header-top">
-                <span class="a4-page__brand" id="previewBrandSecond">노래가사로 배우는 일본어</span>
-                <span class="a4-page__episode" id="previewEpisodeSecond"></span>
-              </div>
-            </header>
+            <article class="a4-page song-page" id="songPageTwo" aria-label="노래 핸드아웃 2페이지">
+              <header class="a4-page__header">
+                <div class="a4-page__header-top">
+                  <span class="a4-page__brand" id="previewBrandSecond">노래가사로 배우는 일본어</span>
+                  <span class="a4-page__episode" id="previewEpisodeSecond"></span>
+                </div>
+              </header>
 
-            <section class="a4-section song-section">
-              <h3 class="a4-section__title">핵심 문법과 문형</h3>
-              <div id="previewGrammar" class="song-card-list"></div>
-            </section>
+              <section class="a4-section song-section">
+                <h3 class="a4-section__title">핵심 문법과 문형</h3>
+                <div id="previewGrammar" class="song-card-list"></div>
+              </section>
 
-            <hr class="a4-divider">
+              <hr class="a4-divider">
 
-            <section class="a4-section song-section">
-              <h3 class="a4-section__title">가사 속 은유와 표현</h3>
-              <div id="previewMetaphor" class="song-rich-text"></div>
-            </section>
+              <section class="a4-section song-section">
+                <h3 class="a4-section__title">가사 속 은유와 표현</h3>
+                <div id="previewMetaphor" class="song-rich-text"></div>
+              </section>
 
-            <hr class="a4-divider">
+              <hr class="a4-divider">
 
-            <section class="a4-section song-section">
-              <h3 class="a4-section__title">실제 회화에서는 이렇게</h3>
-              <div id="previewConversation" class="song-rich-text"></div>
-            </section>
+              <section class="a4-section song-section">
+                <h3 class="a4-section__title">실제 회화에서는 이렇게</h3>
+                <div id="previewConversation" class="song-rich-text"></div>
+              </section>
 
-            <hr class="a4-divider">
+              <hr class="a4-divider">
 
-            <section class="a4-section song-section">
-              <h3 class="a4-section__title">따라 읽기</h3>
-              <div id="previewReading" class="song-rich-text"></div>
-            </section>
+              <section class="a4-section song-section">
+                <h3 class="a4-section__title">따라 읽기</h3>
+                <div id="previewReading" class="song-rich-text"></div>
+              </section>
 
-            <hr class="a4-divider">
+              <hr class="a4-divider">
 
-            <section class="a4-section song-section">
-              <h3 class="a4-section__title">복습 퀴즈</h3>
-              <div id="previewQuiz" class="song-rich-text"></div>
-            </section>
+              <section class="a4-section song-section">
+                <h3 class="a4-section__title">복습 퀴즈</h3>
+                <div id="previewQuiz" class="song-rich-text"></div>
+              </section>
 
-            <hr class="a4-divider">
+              <hr class="a4-divider">
 
-            <section class="a4-section song-section">
-              <h3 class="a4-section__title">오늘의 학습 정리</h3>
-              <div class="song-summary-grid">
-                <div><span class="song-summary-label">기억할 단어</span><p id="previewSummaryWords"></p></div>
-                <div><span class="song-summary-label">기억할 문형</span><p id="previewSummaryGrammar"></p></div>
-                <div><span class="song-summary-label">오늘의 한 문장</span><p id="previewSummarySentence"></p></div>
-              </div>
-            </section>
+              <section class="a4-section song-section">
+                <h3 class="a4-section__title">오늘의 학습 정리</h3>
+                <div class="song-summary-grid">
+                  <div><span class="song-summary-label">기억할 단어</span><p id="previewSummaryWords"></p></div>
+                  <div><span class="song-summary-label">기억할 문형</span><p id="previewSummaryGrammar"></p></div>
+                  <div><span class="song-summary-label">오늘의 한 문장</span><p id="previewSummarySentence"></p></div>
+                </div>
+              </section>
 
-            <img class="a4-qr" id="previewQr" alt="블로그 QR 코드" hidden>
-          </article>
+              <img class="a4-qr" id="previewQr" alt="블로그 QR 코드" hidden>
+            </article>
+          </div>
         </div>
       </div>
     </section>

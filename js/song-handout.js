@@ -843,14 +843,6 @@ async function exportPdf() {
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       })
       .from(clone)
-      .toPdf()
-      .get("pdf")
-      .then((pdf) => {
-        const totalPages = pdf.internal.getNumberOfPages();
-        for (let i = totalPages; i > 1; i -= 1) {
-          pdf.deletePage(i);
-        }
-      })
       .save();
   } catch (error) {
     console.error("PDF export failed:", error);

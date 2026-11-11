@@ -2,12 +2,50 @@
    Lyrics Handout styles
    ========================================================================== */
 
+.preview--song-a4 {
+  padding: 1.5rem;
+}
+
+.a4-scale {
+  width: 100%;
+  max-width: 794px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  container-type: inline-size;
+}
+
+.song-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  align-items: center;
+}
+
 .song-section {
   flex-shrink: 0;
 }
 
 .song-page {
+  width: min(100%, 794px);
+  aspect-ratio: 210 / 297;
+  min-height: 0;
   padding: 16px 24px 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
+  break-after: page;
+}
+
+.song-page + .song-page {
+  page-break-after: always;
+  break-after: page;
 }
 
 .song-page .a4-page__header {
