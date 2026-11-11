@@ -81,6 +81,13 @@
           <fieldset class="form__fieldset">
             <legend class="form__legend">② 가사에서 고른 핵심 표현</legend>
 
+            <details class="json-import">
+              <summary class="json-import__summary">JSON으로 일괄 입력</summary>
+              <div class="form__group">
+                <textarea class="form__input form__textarea json-import__textarea" id="expressionJsonInput" rows="4" placeholder='[{"expression":"手をとる","meaning":"손을 잡다, 손을 이끌다","example":"一緒に歩くときは手をつなごう。","exampleTranslation":"함께 걸을 때는 손을 잡자."}]'></textarea>
+              </div>
+              <button type="button" class="btn btn--add" id="applyExpressionJsonBtn">JSON 적용 (기존 목록 대체)</button>
+            </details>
             <div class="repeat-list" id="expressionEntries"></div>
             <button type="button" class="btn btn--add" id="addExpressionBtn">+ 표현 추가</button>
           </fieldset>
@@ -88,6 +95,13 @@
           <fieldset class="form__fieldset">
             <legend class="form__legend">③ 핵심 단어</legend>
 
+            <details class="json-import">
+              <summary class="json-import__summary">JSON으로 일괄 입력</summary>
+              <div class="form__group">
+                <textarea class="form__input form__textarea json-import__textarea" id="vocabJsonInput" rows="4" placeholder='[{"kanji":"巡り合う (めぐりあう)","meaning":"우연히 만나다, 인연으로 만나다","example":"旅行先で素敵な人に巡り合いました。","exampleTranslation":"여행지에서 멋진 사람을 우연히 만났습니다."}]'></textarea>
+              </div>
+              <button type="button" class="btn btn--add" id="applyVocabJsonBtn">JSON 적용 (기존 목록 대체)</button>
+            </details>
             <div class="repeat-list" id="vocabEntries"></div>
             <button type="button" class="btn btn--add" id="addVocabBtn">+ 단어 추가</button>
           </fieldset>
@@ -95,6 +109,13 @@
           <fieldset class="form__fieldset">
             <legend class="form__legend">④ 핵심 문법과 문형</legend>
 
+            <details class="json-import">
+              <summary class="json-import__summary">JSON으로 일괄 입력</summary>
+              <div class="form__group">
+                <textarea class="form__input form__textarea json-import__textarea" id="grammarJsonInput" rows="4" placeholder='[{"pattern":"~たい / ~하고 싶다","example":"いつか日本で生活してみたいです。","exampleTranslation":"언젠가 일본에서 생활해 보고 싶습니다."}]'></textarea>
+              </div>
+              <button type="button" class="btn btn--add" id="applyGrammarJsonBtn">JSON 적용 (기존 목록 대체)</button>
+            </details>
             <div class="repeat-list" id="grammarEntries"></div>
             <button type="button" class="btn btn--add" id="addGrammarBtn">+ 문법 추가</button>
           </fieldset>

@@ -11,10 +11,16 @@ const dom = {
 
   expressionEntries: document.getElementById("expressionEntries"),
   addExpressionBtn: document.getElementById("addExpressionBtn"),
+  expressionJsonInput: document.getElementById("expressionJsonInput"),
+  applyExpressionJsonBtn: document.getElementById("applyExpressionJsonBtn"),
   vocabEntries: document.getElementById("vocabEntries"),
   addVocabBtn: document.getElementById("addVocabBtn"),
+  vocabJsonInput: document.getElementById("vocabJsonInput"),
+  applyVocabJsonBtn: document.getElementById("applyVocabJsonBtn"),
   grammarEntries: document.getElementById("grammarEntries"),
   addGrammarBtn: document.getElementById("addGrammarBtn"),
+  grammarJsonInput: document.getElementById("grammarJsonInput"),
+  applyGrammarJsonBtn: document.getElementById("applyGrammarJsonBtn"),
 
   metaphorNote: document.getElementById("metaphorNote"),
   conversationNote: document.getElementById("conversationNote"),
@@ -56,9 +62,9 @@ const CIRCLED_NUMBERS = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱�
 const MAX_DIFFICULTY = 5;
 const ALLOWED_RICH_TAGS = /&lt;(\/?)((b|strong|br))\s*\/?>/gi;
 
-const expressions = [{ phrase: "", furigana: "", meaning: "", nuance: "" }];
-const vocab = [{ word: "", reading: "", meaning: "", part: "", usage: "" }];
-const grammar = [{ pattern: "", explanation: "", usage: "", example: "" }];
+const expressions = [{ phrase: "", furigana: "", meaning: "", nuance: "", example: "", exampleTranslation: "" }];
+const vocab = [{ word: "", reading: "", meaning: "", part: "", usage: "", example: "", exampleTranslation: "" }];
+const grammar = [{ pattern: "", explanation: "", usage: "", example: "", exampleTranslation: "" }];
 let difficulty = 0;
 
 function circledNumber(n) {
@@ -236,6 +242,33 @@ function renderExpressionEntries() {
       })
     );
 
+    entry.appendChild(
+      createTextareaGroup({
+        labelText: "예문",
+        value: item.example,
+        placeholder: "예: 新しい出会いがありました。",
+        rows: 2,
+        extraClass: "form__textarea--jp",
+        onInput: (value) => {
+          item.example = value;
+          updatePreview();
+        },
+      })
+    );
+
+    entry.appendChild(
+      createTextareaGroup({
+        labelText: "예문 번역",
+        value: item.exampleTranslation,
+        placeholder: "예문의 한국어 번역",
+        rows: 2,
+        onInput: (value) => {
+          item.exampleTranslation = value;
+          updatePreview();
+        },
+      })
+    );
+
     dom.expressionEntries.appendChild(entry);
   });
 }
@@ -326,6 +359,33 @@ function renderVocabEntries() {
       })
     );
 
+    entry.appendChild(
+      createTextareaGroup({
+        labelText: "예문",
+        value: item.example,
+        placeholder: "예: 素敵な人に巡り合いました。",
+        rows: 2,
+        extraClass: "form__textarea--jp",
+        onInput: (value) => {
+          item.example = value;
+          updatePreview();
+        },
+      })
+    );
+
+    entry.appendChild(
+      createTextareaGroup({
+        labelText: "예문 번역",
+        value: item.exampleTranslation,
+        placeholder: "예문의 한국어 번역",
+        rows: 2,
+        onInput: (value) => {
+          item.exampleTranslation = value;
+          updatePreview();
+        },
+      })
+    );
+
     dom.vocabEntries.appendChild(entry);
   });
 }
@@ -403,6 +463,19 @@ function renderGrammarEntries() {
       })
     );
 
+    entry.appendChild(
+      createTextareaGroup({
+        labelText: "예문 번역",
+        value: item.exampleTranslation,
+        placeholder: "예문의 한국어 번역",
+        rows: 2,
+        onInput: (value) => {
+          item.exampleTranslation = value;
+          updatePreview();
+        },
+      })
+    );
+
     dom.grammarEntries.appendChild(entry);
   });
 }
@@ -412,10 +485,18 @@ function renderPreviewDifficulty() {
   dom.previewDifficultyStars.textContent = "★".repeat(difficulty) + "☆".repeat(MAX_DIFFICULTY - difficulty);
 }
 
+function createPreviewDetail(label, value) {
+  const detail = document.createElement("p");
+  const strong = document.createElement("strong");
+  strong.textContent = `${label} `;
+  detail.append(strong, document.createTextNode(value));
+  return detail;
+}
+
 function renderPreviewExpressions() {
   dom.previewExpressions.innerHTML = "";
 
-  expressions.filter((item) => item.phrase || item.meaning || item.nuance).forEach((item, index) => {
+  expressions.filter((item) => item.phrase || item.meaning || item.nuance || item.example || item.exampleTranslation).forEach((item, index) => {
     const block = document.createElement("div");
     block.className = "song-card";
 
@@ -443,15 +524,19 @@ function renderPreviewExpressions() {
     body.className = "song-card__body";
 
     if (item.meaning) {
-      const meaning = document.createElement("p");
-      meaning.innerHTML = `<strong>의미</strong> ${item.meaning}`;
-      body.appendChild(meaning);
+      body.appendChild(createPreviewDetail("의미", item.meaning));
     }
 
     if (item.nuance) {
-      const nuance = document.createElement("p");
-      nuance.innerHTML = `<strong>뉘앙스</strong> ${item.nuance}`;
-      body.appendChild(nuance);
+      body.appendChild(createPreviewDetail("뉘앙스", item.nuance));
+    }
+
+    if (item.example) {
+      body.appendChild(createPreviewDetail("예문", item.example));
+    }
+
+    if (item.exampleTranslation) {
+      body.appendChild(createPreviewDetail("번역", item.exampleTranslation));
     }
 
     block.appendChild(title);
@@ -463,7 +548,7 @@ function renderPreviewExpressions() {
 function renderPreviewVocab() {
   dom.previewVocab.innerHTML = "";
 
-  vocab.filter((item) => item.word || item.meaning || item.usage).forEach((item, index) => {
+  vocab.filter((item) => item.word || item.meaning || item.usage || item.example || item.exampleTranslation).forEach((item, index) => {
     const block = document.createElement("div");
     block.className = "song-card";
 
@@ -491,21 +576,23 @@ function renderPreviewVocab() {
     body.className = "song-card__body";
 
     if (item.meaning) {
-      const meaning = document.createElement("p");
-      meaning.innerHTML = `<strong>뜻</strong> ${item.meaning}`;
-      body.appendChild(meaning);
+      body.appendChild(createPreviewDetail("뜻", item.meaning));
     }
 
     if (item.part) {
-      const part = document.createElement("p");
-      part.innerHTML = `<strong>품사</strong> ${item.part}`;
-      body.appendChild(part);
+      body.appendChild(createPreviewDetail("품사", item.part));
     }
 
     if (item.usage) {
-      const usage = document.createElement("p");
-      usage.innerHTML = `<strong>활용</strong> ${item.usage}`;
-      body.appendChild(usage);
+      body.appendChild(createPreviewDetail("활용", item.usage));
+    }
+
+    if (item.example) {
+      body.appendChild(createPreviewDetail("예문", item.example));
+    }
+
+    if (item.exampleTranslation) {
+      body.appendChild(createPreviewDetail("번역", item.exampleTranslation));
     }
 
     block.appendChild(title);
@@ -517,7 +604,7 @@ function renderPreviewVocab() {
 function renderPreviewGrammar() {
   dom.previewGrammar.innerHTML = "";
 
-  grammar.filter((item) => item.pattern || item.explanation || item.example).forEach((item, index) => {
+  grammar.filter((item) => item.pattern || item.explanation || item.example || item.exampleTranslation).forEach((item, index) => {
     const block = document.createElement("div");
     block.className = "song-card";
 
@@ -538,21 +625,19 @@ function renderPreviewGrammar() {
     body.className = "song-card__body";
 
     if (item.explanation) {
-      const explanation = document.createElement("p");
-      explanation.innerHTML = `<strong>설명</strong> ${item.explanation}`;
-      body.appendChild(explanation);
+      body.appendChild(createPreviewDetail("설명", item.explanation));
     }
 
     if (item.usage) {
-      const usage = document.createElement("p");
-      usage.innerHTML = `<strong>사용 방식</strong> ${item.usage}`;
-      body.appendChild(usage);
+      body.appendChild(createPreviewDetail("사용 방식", item.usage));
     }
 
     if (item.example) {
-      const example = document.createElement("p");
-      example.innerHTML = `<strong>예문</strong> ${item.example}`;
-      body.appendChild(example);
+      body.appendChild(createPreviewDetail("예문", item.example));
+    }
+
+    if (item.exampleTranslation) {
+      body.appendChild(createPreviewDetail("번역", item.exampleTranslation));
     }
 
     block.appendChild(title);
@@ -562,8 +647,82 @@ function renderPreviewGrammar() {
 }
 
 function renderRichText(target, text) {
-  const cleaned = sanitizeRichText(text || "");
-  target.innerHTML = cleaned ? cleaned.replace(/\n/g, "<br>") : "입력된 내용이 없습니다.";
+  const hasContent = Boolean(text.trim());
+  const cleaned = sanitizeRichText(hasContent ? text : "");
+  target.innerHTML = cleaned.replace(/\n/g, "<br>");
+
+  const section = target.closest(".song-section");
+  if (section) {
+    section.hidden = !hasContent;
+    const divider = section.previousElementSibling;
+    if (divider?.classList.contains("a4-divider")) {
+      divider.hidden = !hasContent;
+    }
+  }
+}
+
+function applyJsonInput(input, items, normalize, render, label) {
+  try {
+    const parsed = JSON.parse(input.value);
+    const list = Array.isArray(parsed) ? parsed : [parsed];
+    const importedItems = list.map((item, index) => {
+      if (!item || typeof item !== "object" || Array.isArray(item)) {
+        throw new Error(`${index + 1}번째 항목은 객체여야 합니다.`);
+      }
+      return normalize(item);
+    }).filter(Boolean);
+
+    if (importedItems.length === 0) {
+      throw new Error(`가져올 수 있는 ${label} 항목이 없습니다.`);
+    }
+
+    items.splice(0, items.length, ...importedItems);
+    render();
+    updatePreview();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
+    alert(`JSON을 적용하지 못했습니다: ${message}`);
+  }
+}
+
+function getJsonString(item, key) {
+  return typeof item[key] === "string" ? item[key].trim() : "";
+}
+
+function normalizeExpression(item) {
+  const phrase = getJsonString(item, "expression");
+  const meaning = getJsonString(item, "meaning");
+  const example = getJsonString(item, "example");
+  const exampleTranslation = getJsonString(item, "exampleTranslation");
+  if (!phrase && !meaning && !example) return null;
+
+  return { phrase, furigana: "", meaning, nuance: "", example, exampleTranslation };
+}
+
+function normalizeVocab(item) {
+  const { word, reading } = splitWordAndReading(getJsonString(item, "kanji"));
+  const meaning = getJsonString(item, "meaning");
+  const example = getJsonString(item, "example");
+  const exampleTranslation = getJsonString(item, "exampleTranslation");
+  if (!word && !meaning && !example) return null;
+
+  return { word, reading, meaning, part: "", usage: "", example, exampleTranslation };
+}
+
+function normalizeGrammar(item) {
+  const pattern = getJsonString(item, "pattern");
+  const example = getJsonString(item, "example");
+  const exampleTranslation = getJsonString(item, "exampleTranslation");
+  if (!pattern && !example) return null;
+
+  return { pattern, explanation: "", usage: "", example, exampleTranslation };
+}
+
+function splitWordAndReading(value) {
+  const match = value.match(/^(.*?)\s*[（(]([^）)]*)[）)]\s*$/u);
+  return match
+    ? { word: match[1].trim(), reading: match[2].trim() }
+    : { word: value, reading: "" };
 }
 
 function updatePreview() {
@@ -580,8 +739,13 @@ function updatePreview() {
   dom.previewSongTitle.textContent = dom.songTitle.value.trim() || "곡명";
   dom.previewSongArtist.textContent = dom.songArtist.value.trim() || "가수";
   dom.previewSongRelease.textContent = dom.songRelease.value.trim() || "발매 정보";
-  dom.previewSongTheme.textContent = dom.songTheme.value.trim() || "노래의 주제와 분위기 설명을 입력해 주세요.";
-  dom.previewSongDifficultyText.textContent = dom.songDifficultyText.value.trim() || "학습 포인트를 입력해 주세요.";
+  const songTheme = dom.songTheme.value.trim();
+  dom.previewSongTheme.textContent = songTheme;
+  dom.previewSongTheme.closest(".song-note-box").hidden = !songTheme;
+
+  const songDifficultyText = dom.songDifficultyText.value.trim();
+  dom.previewSongDifficultyText.textContent = songDifficultyText;
+  dom.previewSongDifficultyText.closest(".song-note-box").hidden = !songDifficultyText;
 
   renderPreviewExpressions();
   renderPreviewVocab();
@@ -727,21 +891,33 @@ function bindEvents() {
   });
 
   dom.addExpressionBtn.addEventListener("click", () => {
-    expressions.push({ phrase: "", furigana: "", meaning: "", nuance: "" });
+    expressions.push({ phrase: "", furigana: "", meaning: "", nuance: "", example: "", exampleTranslation: "" });
     renderExpressionEntries();
     updatePreview();
   });
 
   dom.addVocabBtn.addEventListener("click", () => {
-    vocab.push({ word: "", reading: "", meaning: "", part: "", usage: "" });
+    vocab.push({ word: "", reading: "", meaning: "", part: "", usage: "", example: "", exampleTranslation: "" });
     renderVocabEntries();
     updatePreview();
   });
 
   dom.addGrammarBtn.addEventListener("click", () => {
-    grammar.push({ pattern: "", explanation: "", usage: "", example: "" });
+    grammar.push({ pattern: "", explanation: "", usage: "", example: "", exampleTranslation: "" });
     renderGrammarEntries();
     updatePreview();
+  });
+
+  dom.applyExpressionJsonBtn.addEventListener("click", () => {
+    applyJsonInput(dom.expressionJsonInput, expressions, normalizeExpression, renderExpressionEntries, "표현");
+  });
+
+  dom.applyVocabJsonBtn.addEventListener("click", () => {
+    applyJsonInput(dom.vocabJsonInput, vocab, normalizeVocab, renderVocabEntries, "단어");
+  });
+
+  dom.applyGrammarJsonBtn.addEventListener("click", () => {
+    applyJsonInput(dom.grammarJsonInput, grammar, normalizeGrammar, renderGrammarEntries, "문법");
   });
 
   dom.qrImage.addEventListener("change", () => {
