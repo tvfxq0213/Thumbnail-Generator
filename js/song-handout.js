@@ -5,9 +5,7 @@ const dom = {
 
   songTitle: document.getElementById("songTitle"),
   songArtist: document.getElementById("songArtist"),
-  songRelease: document.getElementById("songRelease"),
   songTheme: document.getElementById("songTheme"),
-  songDifficultyText: document.getElementById("songDifficultyText"),
 
   expressionEntries: document.getElementById("expressionEntries"),
   addExpressionBtn: document.getElementById("addExpressionBtn"),
@@ -42,9 +40,7 @@ const dom = {
   previewDifficultyStars: document.getElementById("previewDifficultyStars"),
   previewSongTitle: document.getElementById("previewSongTitle"),
   previewSongArtist: document.getElementById("previewSongArtist"),
-  previewSongRelease: document.getElementById("previewSongRelease"),
   previewSongTheme: document.getElementById("previewSongTheme"),
-  previewSongDifficultyText: document.getElementById("previewSongDifficultyText"),
   previewExpressions: document.getElementById("previewExpressions"),
   previewVocab: document.getElementById("previewVocab"),
   previewGrammar: document.getElementById("previewGrammar"),
@@ -738,14 +734,9 @@ function updatePreview() {
 
   dom.previewSongTitle.textContent = dom.songTitle.value.trim() || "곡명";
   dom.previewSongArtist.textContent = dom.songArtist.value.trim() || "가수";
-  dom.previewSongRelease.textContent = dom.songRelease.value.trim() || "발매 정보";
   const songTheme = dom.songTheme.value.trim();
   dom.previewSongTheme.textContent = songTheme;
   dom.previewSongTheme.closest(".song-note-box").hidden = !songTheme;
-
-  const songDifficultyText = dom.songDifficultyText.value.trim();
-  dom.previewSongDifficultyText.textContent = songDifficultyText;
-  dom.previewSongDifficultyText.closest(".song-note-box").hidden = !songDifficultyText;
 
   renderPreviewExpressions();
   renderPreviewVocab();
@@ -876,9 +867,7 @@ function bindEvents() {
     dom.episodeNumber,
     dom.songTitle,
     dom.songArtist,
-    dom.songRelease,
     dom.songTheme,
-    dom.songDifficultyText,
     dom.metaphorNote,
     dom.conversationNote,
     dom.readingNote,

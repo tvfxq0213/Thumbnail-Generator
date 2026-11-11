@@ -6,20 +6,49 @@
   flex-shrink: 0;
 }
 
+.song-page {
+  padding: 16px 24px 20px;
+}
+
+.song-page .a4-page__header {
+  gap: 2px;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  border-bottom-width: 2px;
+}
+
+.song-page .a4-page__brand {
+  font-size: 18px;
+}
+
+.song-page .a4-page__episode {
+  font-size: 12px;
+}
+
+.song-page .a4-section__title {
+  font-size: 11px;
+  padding: 2px 8px;
+  margin-bottom: 4px;
+}
+
+.song-page .a4-divider {
+  margin: 4px 0;
+}
+
 .song-meta-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-bottom: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 8px;
 }
 
 .song-meta-item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 9px 10px;
+  gap: 2px;
+  padding: 6px 8px;
   border: 1px solid #e5e5e5;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #f8faf8;
 }
 
@@ -32,69 +61,76 @@
 }
 
 .song-note-box {
-  margin-top: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
+  margin-top: 6px;
+  padding: 6px 8px;
+  border-radius: 7px;
   border: 1px solid #dbe9dc;
   background: #f6faf7;
 }
 
 .song-note-box h4 {
-  margin: 0 0 6px;
-  font-size: 12px;
+  margin: 0 0 3px;
+  font-size: 10px;
   color: #1d3f2b;
 }
 
 .song-note-box p {
   margin: 0;
-  font-size: 12px;
-  line-height: 1.6;
+  font-size: 10px;
+  line-height: 1.4;
   color: #2b2b2b;
 }
 
 .song-card-list {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 4px;
 }
 
 .song-card {
-  padding: 10px 12px;
+  min-width: 0;
+  padding: 3px 7px;
   border: 1px solid #dfeae1;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #f8fbf9;
 }
 
 .song-card__title {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 5px;
   flex-wrap: wrap;
-  margin-bottom: 6px;
+  margin-bottom: 3px;
   font-weight: 700;
 }
 
 .song-card__num {
   color: var(--color-accent);
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .song-card__phrase {
-  font-size: 18px;
+  font-size: 13px;
   font-family: var(--font-jp, "LINE Seed JP", serif);
   color: #1b1b1b;
 }
 
 .song-card__furigana {
-  font-size: 11px;
+  font-size: 10px;
   color: #7a7a7a;
 }
 
 .song-card__body {
   display: grid;
-  gap: 4px;
-  font-size: 12px;
-  line-height: 1.5;
+  gap: 2px;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+#previewVocab .song-card__body {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 5px;
 }
 
 .song-card__body strong {
@@ -108,9 +144,9 @@
 
 .song-rich-text {
   display: grid;
-  gap: 8px;
-  font-size: 12px;
-  line-height: 1.7;
+  gap: 4px;
+  font-size: 10px;
+  line-height: 1.45;
 }
 
 .song-rich-text p {
@@ -119,24 +155,20 @@
 
 .song-summary-grid {
   display: grid;
-  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
 }
 
 .song-summary-grid > div {
-  padding: 10px 12px;
+  min-width: 0;
+  padding: 6px 8px;
   border: 1px solid #dfeae1;
-  border-radius: 10px;
+  border-radius: 7px;
   background: #f8fbf9;
 }
 
 .song-summary-grid p {
-  margin: 6px 0 0;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-@media (max-width: 640px) {
-  .song-meta-grid {
-    grid-template-columns: 1fr;
-  }
+  margin: 3px 0 0;
+  font-size: 10px;
+  line-height: 1.4;
 }
