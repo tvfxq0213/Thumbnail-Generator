@@ -1,4 +1,6 @@
 const dom = {
+  songJsonFile: document.getElementById("songJsonFile"),
+  songJsonStatus: document.getElementById("songJsonStatus"),
   brandText: document.getElementById("brandText"),
   episodeNumber: document.getElementById("episodeNumber"),
   difficultyStars: document.getElementById("difficultyStars"),
@@ -57,6 +59,10 @@ const dom = {
 const CIRCLED_NUMBERS = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳";
 const MAX_DIFFICULTY = 5;
 const ALLOWED_RICH_TAGS = /&lt;(\/?)((b|strong|br))\s*\/?>/gi;
+const PDF_PAGE_WIDTH = 794;
+const PDF_RENDER_SCALE = 2;
+// Match each export page to html2pdf's floored A4 canvas slice height.
+const PDF_PAGE_HEIGHT = Math.floor(PDF_PAGE_WIDTH * PDF_RENDER_SCALE * 297 / 210) / PDF_RENDER_SCALE;
 
 const expressions = [{ phrase: "", furigana: "", meaning: "", nuance: "", example: "", exampleTranslation: "" }];
 const vocab = [{ word: "", reading: "", meaning: "", part: "", usage: "", example: "", exampleTranslation: "" }];
@@ -721,6 +727,170 @@ function splitWordAndReading(value) {
     : { word: value, reading: "" };
 }
 
+function getHandoutItems(data, key, normalize) {
+  if (data[key] === undefined) return null;
+  if (!Array.isArray(data[key])) {
+    throw new Error(`"${key}" 항목은 배열이어야 합니다.`);
+  }
+
+  return data[key]
+    .map((item, index) => {
+      if (!item || typeof item !== "object" || Array.isArray(item)) {
+        throw new Error(`"${key}"의 ${index + 1}번째 항목은 객체여야 합니다.`);
+      }
+      if (item.examples !== undefined && !Array.isArray(item.examples)) {
+        throw new Error(`"${key}"의 ${index + 1}번째 examples 항목은 배열이어야 합니다.`);
+      }
+      if (item.examples?.some((example) => !example || typeof example !== "object" || Array.isArray(example))) {
+        throw new Error(`"${key}"의 ${index + 1}번째 examples 항목은 객체 배열이어야 합니다.`);
+      }
+      if (item.handout !== undefined && (!item.handout || typeof item.handout !== "object" || Array.isArray(item.handout))) {
+        throw new Error(`"${key}"의 ${index + 1}번째 handout 항목은 객체여야 합니다.`);
+      }
+      return {
+        item,
+        normalized: normalize(item),
+        order: Number.isFinite(item.handout?.order) ? item.handout.order : index,
+      };
+    })
+    .filter(({ item }) => item.handout?.show !== false)
+    .sort((a, b) => a.order - b.order)
+    .map(({ normalized }) => normalized);
+}
+
+function getFirstExample(item) {
+  const example = item.examples?.[0];
+  return {
+    example: getJsonString(example || {}, "japanese"),
+    exampleTranslation: getJsonString(example || {}, "korean"),
+  };
+}
+
+function normalizeHandoutExpression(item) {
+  const { example, exampleTranslation } = getFirstExample(item);
+  return {
+    phrase: getJsonString(item, "term"),
+    furigana: getJsonString(item, "reading"),
+    meaning: getJsonString(item, "meaning"),
+    nuance: getJsonString(item, "nuance"),
+    example,
+    exampleTranslation,
+  };
+}
+
+function normalizeHandoutVocab(item) {
+  const { example, exampleTranslation } = getFirstExample(item);
+  const explanation = getJsonString(item, "blogExplanation");
+  const nuance = getJsonString(item, "nuance");
+  return {
+    word: getJsonString(item, "term"),
+    reading: getJsonString(item, "reading"),
+    meaning: getJsonString(item, "meaning"),
+    part: "",
+    usage: [explanation, nuance].filter(Boolean).join(" "),
+    example,
+    exampleTranslation,
+  };
+}
+
+function normalizeHandoutGrammar(item) {
+  const { example, exampleTranslation } = getFirstExample(item);
+  return {
+    pattern: getJsonString(item, "term"),
+    explanation: getJsonString(item, "meaning"),
+    usage: getJsonString(item, "nuance"),
+    example,
+    exampleTranslation,
+  };
+}
+
+function readSongHandoutJson(data) {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("JSON 최상위 값은 객체여야 합니다.");
+  }
+  if (!data.song || typeof data.song !== "object" || Array.isArray(data.song)) {
+    throw new Error('"song" 정보가 없습니다.');
+  }
+  if (data.blog !== undefined && (!data.blog || typeof data.blog !== "object" || Array.isArray(data.blog))) {
+    throw new Error('"blog" 항목은 객체여야 합니다.');
+  }
+  if (data.todaySentence !== undefined && (!data.todaySentence || typeof data.todaySentence !== "object" || Array.isArray(data.todaySentence))) {
+    throw new Error('"todaySentence" 항목은 객체여야 합니다.');
+  }
+
+  const vocabulary = getHandoutItems(data, "vocabulary", normalizeHandoutVocab);
+  const expressionsList = getHandoutItems(data, "expressions", normalizeHandoutExpression);
+  const grammarList = getHandoutItems(data, "grammar", normalizeHandoutGrammar);
+  const conversationUsage = data.blog?.conversationUsage;
+  if (conversationUsage !== undefined && !Array.isArray(conversationUsage)) {
+    throw new Error('"blog.conversationUsage" 항목은 배열이어야 합니다.');
+  }
+  if (conversationUsage?.some((item) => !item || typeof item !== "object" || Array.isArray(item))) {
+    throw new Error('"blog.conversationUsage" 항목은 객체 배열이어야 합니다.');
+  }
+
+  return {
+    songTitle: getJsonString(data.song, "title"),
+    songArtist: getJsonString(data.song, "artist"),
+    songTheme: getJsonString(data.song, "theme"),
+    expressions: expressionsList,
+    vocabulary,
+    grammar: grammarList,
+    metaphorNote: getJsonString(data.blog || {}, "figurativeInterpretation"),
+    conversationNote: (conversationUsage || [])
+      .map((item) => [getJsonString(item, "situation"), getJsonString(item, "japanese"), getJsonString(item, "korean")].filter(Boolean).join("\n"))
+      .filter(Boolean)
+      .join("\n\n"),
+    readingNote: data.todaySentence && typeof data.todaySentence === "object"
+      ? [getJsonString(data.todaySentence, "japanese"), getJsonString(data.todaySentence, "reading")].filter(Boolean).join("\n")
+      : "",
+    summaryWords: (vocabulary || []).slice(0, 3).map((item) => item.word).filter(Boolean).join(" / "),
+    summaryGrammar: (grammarList || []).length ? grammarList[0].pattern : "",
+    summarySentence: data.todaySentence?.handout?.show === false
+      ? ""
+      : getJsonString(data.todaySentence || {}, "japanese"),
+  };
+}
+
+async function handleSongJsonUpload(file) {
+  if (!file) return;
+
+  dom.songJsonStatus.textContent = "";
+  dom.songJsonFile.removeAttribute("aria-invalid");
+
+  try {
+    const data = JSON.parse(await file.text());
+    const handout = readSongHandoutJson(data);
+
+    dom.songTitle.value = handout.songTitle;
+    dom.songArtist.value = handout.songArtist;
+    dom.songTheme.value = handout.songTheme;
+    dom.metaphorNote.value = handout.metaphorNote;
+    dom.conversationNote.value = handout.conversationNote;
+    dom.readingNote.value = handout.readingNote;
+    dom.quizNote.value = "";
+    dom.summaryWords.value = handout.summaryWords;
+    dom.summaryGrammar.value = handout.summaryGrammar;
+    dom.summarySentence.value = handout.summarySentence;
+
+    if (handout.expressions) expressions.splice(0, expressions.length, ...handout.expressions);
+    if (handout.vocabulary) vocab.splice(0, vocab.length, ...handout.vocabulary);
+    if (handout.grammar) grammar.splice(0, grammar.length, ...handout.grammar);
+
+    renderExpressionEntries();
+    renderVocabEntries();
+    renderGrammarEntries();
+    updatePreview();
+    dom.songJsonStatus.textContent = `${file.name} 파일을 적용했습니다.`;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
+    dom.songJsonStatus.textContent = `JSON 파일을 적용하지 못했습니다: ${message}`;
+    dom.songJsonFile.setAttribute("aria-invalid", "true");
+  } finally {
+    dom.songJsonFile.value = "";
+  }
+}
+
 function updatePreview() {
   const brandText = dom.brandText.value.trim() || "노래가사로 배우는 일본어";
   const episodeText = formatEpisodeNumber(dom.episodeNumber.value);
@@ -793,10 +963,19 @@ function createExportClone() {
   const source = document.getElementById("songPreviewRoot");
   const wrapper = document.createElement("div");
   wrapper.setAttribute("aria-hidden", "true");
-  wrapper.style.cssText = "position:fixed;left:-10000px;top:0;width:794px;overflow:visible;pointer-events:none;z-index:-1;";
+  wrapper.style.cssText = `position:fixed;left:-10000px;top:0;width:${PDF_PAGE_WIDTH}px;overflow:visible;pointer-events:none;z-index:-1;`;
 
   const clone = source.cloneNode(true);
-  clone.style.cssText = "display:flex;flex-direction:column;gap:24px;position:static;transform:none;width:794px;margin:0;overflow:visible;";
+  clone.style.cssText = `display:flex;flex-direction:column;gap:0;position:static;transform:none;width:${PDF_PAGE_WIDTH}px;margin:0;overflow:visible;`;
+  clone.querySelectorAll(".song-page").forEach((page) => {
+    page.style.height = `${PDF_PAGE_HEIGHT}px`;
+    page.style.minHeight = `${PDF_PAGE_HEIGHT}px`;
+    page.style.maxHeight = `${PDF_PAGE_HEIGHT}px`;
+    page.style.aspectRatio = "auto";
+    page.style.flex = "0 0 auto";
+    page.style.breakAfter = "auto";
+    page.style.pageBreakAfter = "auto";
+  });
 
   wrapper.appendChild(clone);
   document.body.appendChild(wrapper);
@@ -832,8 +1011,9 @@ async function exportPdf() {
         margin: 0,
         filename: generateFilename(),
         image: { type: "jpeg", quality: 0.98 },
+        pagebreak: { mode: [] },
         html2canvas: {
-          scale: 2,
+          scale: PDF_RENDER_SCALE,
           useCORS: true,
           backgroundColor: "#ffffff",
           logging: false,
@@ -854,6 +1034,10 @@ async function exportPdf() {
 }
 
 function bindEvents() {
+  dom.songJsonFile.addEventListener("change", () => {
+    handleSongJsonUpload(dom.songJsonFile.files[0]);
+  });
+
   [
     dom.brandText,
     dom.episodeNumber,

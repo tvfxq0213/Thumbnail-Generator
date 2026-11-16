@@ -34,6 +34,12 @@
         <h2 class="card__title" id="formTitle">음악형 핸드아웃 정보 입력</h2>
 
         <form class="form" id="songForm" novalidate>
+          <div class="form__group json-import">
+            <label class="form__label" for="songJsonFile">핸드아웃 JSON 파일 업로드</label>
+            <input class="form__input" type="file" id="songJsonFile" accept=".json,application/json">
+            <p class="json-import__hint" id="songJsonStatus" role="status" aria-live="polite">노래 핸드아웃 JSON을 선택하면 입력값과 미리보기에 자동으로 반영됩니다.</p>
+          </div>
+
           <div class="form__group">
             <label class="form__label" for="brandText">상단 브랜드명</label>
             <input class="form__input" type="text" id="brandText" value="노래가사로 배우는 일본어" maxlength="40">

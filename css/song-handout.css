@@ -167,8 +167,7 @@
 }
 
 #previewVocab .song-card__body {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 5px;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .song-card__body strong {
